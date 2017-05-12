@@ -16,8 +16,10 @@ namespace YLMAPI.Installer {
         private static Stopwatch _Stopwatch;
         public static float Time { get; private set; }
         public static float FrameTimeSlow = 1f / 5f;
-        public static float FrameTime = SupportsFast ? (1f / 60f) : (1f / 59f);
-        public static float FrameTimeSmooth = 1f / 59f;
+        public static float FrameTime = 1f / 60f;
+        public static float FrameTimeSmooth = 1f / 60f;
+
+        public static float CurrentFrameTime { get; private set; }
 
         public static bool IsThrottled = false;
         public static int Invalidated = 0;
@@ -131,6 +133,7 @@ namespace YLMAPI.Installer {
 
             float frameTimeF = FrameTimeSmooth;
             long frameTime;
+            long frameStartPrev;
             long frameStart = 0;
             long frameLeft;
 
@@ -142,7 +145,9 @@ namespace YLMAPI.Installer {
                 
                 while ((frameLeft = frameTime - (_Stopwatch.ElapsedMilliseconds - frameStart)) > 0)
                     Thread.Sleep((int) frameLeft);
+                frameStartPrev = frameStart;
                 frameStart = _Stopwatch.ElapsedMilliseconds;
+                CurrentFrameTime = (frameStart - frameStartPrev) * 0.001f;
 
                 controls.Clear();
 
@@ -178,10 +183,12 @@ namespace YLMAPI.Installer {
                     }
                 }
 
+                /*
                 if (SupportsFast) {
                     InvokeInvalidate(AnimationRoot, true);
                     continue;
                 }
+                */
 
                 /**//*
                 while (Invalidated < 0 || InvalidatedRoot < 0)

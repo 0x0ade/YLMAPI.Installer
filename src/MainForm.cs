@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.Drawing.Text;
@@ -18,18 +19,20 @@ namespace YLMAPI.Installer {
                 // cp.ExStyle |= 0x02000000; // WS_EX_COMPOSITED
                 // cp.ExStyle |= 0x00080000; // WS_EX_LAYERED
 
-                if (!AnimationManager.SupportsFast) {
-                    cp.ExStyle |= 0x02000000; // WS_EX_COMPOSITED
-                }
+                cp.ExStyle |= 0x02000000; // WS_EX_COMPOSITED
 
                 return cp;
             }
         }
 
-        public static Random RNG = new Random();
+        public readonly static Random RNG = new Random();
+
+        public bool DrawFPS = true;
 
         public Size BackgroundSize;
         public float BackgroundSizeFactor;
+
+        private Stopwatch _Stopwatch;
 
         private PrivateFontCollection _Fonts;
         private Font _Font;
@@ -45,16 +48,16 @@ namespace YLMAPI.Installer {
 
 
         private void MainForm_Load(object _s, EventArgs _e) {
+            _Stopwatch = new Stopwatch();
+            _Stopwatch.Reset();
+            _Stopwatch.Start();
+
             SuspendLayout();
 
-            if (AnimationManager.SupportsFast) {
-                // Nop. Everything works perfectly fine... somehow!
-            } else {
-                SetStyle(ControlStyles.UserPaint, true);
-                SetStyle(ControlStyles.OptimizedDoubleBuffer, true);
-                SetStyle(ControlStyles.AllPaintingInWmPaint, true);
-                DoubleBuffered = true;
-            }
+            SetStyle(ControlStyles.UserPaint, true);
+            SetStyle(ControlStyles.OptimizedDoubleBuffer, true);
+            SetStyle(ControlStyles.AllPaintingInWmPaint, true);
+            DoubleBuffered = true;
 
             ResizeRedraw = true;
 
@@ -62,7 +65,8 @@ namespace YLMAPI.Installer {
             ResizeEnd += (s, e) => AnimationManager.IsThrottled = false;
 
             SizeChanged += (s, e) => {
-                HeaderPanel.Width = Width;
+                foreach (Panel panel in Controls)
+                    panel.Width = Width;
             };
 
             _Fonts = new PrivateFontCollection();
@@ -91,7 +95,13 @@ namespace YLMAPI.Installer {
                 (int) (BackgroundImage.Height * 4f)
             );
 
-            ResumeLayout(true);
+            foreach (Panel panel in Controls) {
+                if (panel != HeaderPanel && panel != MainPanel)
+                    panel.Visible = false;
+            }
+
+            ResumeLayout(false);
+            PerformLayout();
 
             AnimationManager.AnimationRoot = this;
             Invalidated += (s, e) => AnimationManager.InvalidatedRoot++;
@@ -99,39 +109,23 @@ namespace YLMAPI.Installer {
             this.Animate((a, t) => Opacity = t, dur: 0.4f, smooth: true);
             this.Animate((a, t) => BackgroundSizeFactor = 1f + 8f * (1f - t), dur: 2f, easing: Easings.QuinticEaseOut, smooth: true);
 
-            HeaderPanel.SlideIn(1f, 461, 1, delay: 0.05f);
+            HeaderPanel.SlideIn(1f, delay: 0.05f);
 
-            MainPanel.SlideIn(1f, 461, 1, delay: 0.1f);
-
-            MainPanel.Animate(new AnimationSequence() {
-                Sequence = {
-                    MainPanel.AnimationDelay(4f, run: false),
-                    MainPanel.SlideOut(1f, run: false),
-                    MainPanel.SlideIn(1f, run: false),
-                    MainPanel.SlideOut(1f, run: false),
-                    MainPanel.SlideIn(1f, run: false),
-                    MainPanel.SlideOut(1f, run: false),
-                    MainPanel.SlideIn(1f, run: false),
-                }
-            });
-
-            ProgressPanel.Animate(new AnimationSequence() {
-                Sequence = {
-                    ProgressPanel.AnimationDelay(4f, run: false),
-                    ProgressPanel.SlideIn(1f, run: false),
-                    ProgressPanel.SlideOut(1f, run: false),
-                    ProgressPanel.SlideIn(1f, run: false),
-                    ProgressPanel.SlideOut(1f, run: false),
-                    ProgressPanel.SlideIn(1f, run: false),
-                    ProgressPanel.SlideOut(1f, run: false),
-                }
-            });
+            MainPanel.SlideIn(1f, delay: 0.1f);
 
         }
 
         private Pen _ResizeCornerPen = new Pen(Color.FromArgb(127, 255, 255, 255));
         private SolidBrush _BackgroundBrush = new SolidBrush(Color.FromArgb(127, 0, 0, 0));
+        private SolidBrush _FPSBrush = new SolidBrush(Color.FromArgb(127, 255, 255, 255));
+        private long _FrameStart;
+        private long _FrameStartPrev;
+        private float _CurrentFrameTime;
         protected override void OnPaintBackground(PaintEventArgs e) {
+            _FrameStartPrev = _FrameStart;
+            _FrameStart = _Stopwatch.ElapsedMilliseconds;
+            _CurrentFrameTime = (_FrameStart - _FrameStartPrev) * 0.001f;
+
             Graphics g = e.Graphics;
 
             Point cursor = PointToClient(Cursor.Position);
@@ -146,9 +140,8 @@ namespace YLMAPI.Installer {
                 -cursor.Y * 0.1f
             );
 
-            foreach (Panel panel in Controls) {
+            foreach (Panel panel in Controls)
                 g.FillRectangle(_BackgroundBrush, panel.Left, panel.Top, panel.Width, panel.Height);
-            }
 
             for (int i = 0; i < 4; i++) {
                 g.DrawLine(_ResizeCornerPen,
@@ -157,6 +150,11 @@ namespace YLMAPI.Installer {
                     Width - 1,
                     Height - 8
                 );
+            }
+
+            if (DrawFPS) {
+                g.DrawString((1f / AnimationManager.CurrentFrameTime).ToString("F3", System.Globalization.CultureInfo.InvariantCulture), _Font, _FPSBrush, 0, 0);
+                g.DrawString((1f / _CurrentFrameTime).ToString("F3", System.Globalization.CultureInfo.InvariantCulture), _Font, _FPSBrush, 0, 14 * (AutoScaleFactor.Height));
             }
         }
 

@@ -13,21 +13,17 @@ namespace YLMAPI.Installer {
             get {
                 CreateParams cp = base.CreateParams;
                 // cp.ExStyle |= 0x00000020; // WS_EX_TRANSPARENT
-                // cp.ExStyle |= 0x02000000; // WS_EX_COMPOSITED
+                cp.ExStyle |= 0x02000000; // WS_EX_COMPOSITED
                 return cp;
             }
         }
 
         public CustomPanel()
             : base() {
-            if (AnimationManager.SupportsFast) {
-
-            } else {
-                SetStyle(ControlStyles.UserPaint, true);
-                SetStyle(ControlStyles.OptimizedDoubleBuffer, true);
-                SetStyle(ControlStyles.AllPaintingInWmPaint, true);
-                DoubleBuffered = true;
-            }
+            SetStyle(ControlStyles.UserPaint, true);
+            SetStyle(ControlStyles.OptimizedDoubleBuffer, true);
+            SetStyle(ControlStyles.AllPaintingInWmPaint, true);
+            DoubleBuffered = true;
         }
 
         private const int WM_NCHITTEST = 0x0084;
