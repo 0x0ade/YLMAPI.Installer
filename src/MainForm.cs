@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Drawing;
+using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
 using System.Drawing.Text;
 using System.Linq;
@@ -126,6 +127,14 @@ namespace YLMAPI.Installer {
             _CurrentFrameTime = (_FrameStart - _FrameStartPrev) * 0.001f;
 
             Graphics g = e.Graphics;
+
+            // This should obviously give a perf boost.
+            g.CompositingQuality = CompositingQuality.HighSpeed;
+            // ... it still renders blurred?
+            g.InterpolationMode = InterpolationMode.NearestNeighbor;
+            // And text's still fine?!?!
+            g.SmoothingMode = SmoothingMode.HighSpeed;
+            // Free perf boost!
 
             Point cursor = PointToClient(Cursor.Position);
             g.DrawBackgroundImage(
