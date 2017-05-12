@@ -41,9 +41,8 @@ namespace YLMAPI.Installer {
             InitializeComponent();
 
             SuspendLayout();
-            Size = new Size(460, 600);
+            MinimumSize = Size = new Size(460, 600);
             ResumeLayout(false);
-            MinimumSize = Size;
         }
 
 
@@ -141,7 +140,8 @@ namespace YLMAPI.Installer {
             );
 
             foreach (Panel panel in Controls)
-                g.FillRectangle(_BackgroundBrush, panel.Left, panel.Top, panel.Width, panel.Height);
+                if (panel.Visible)
+                    g.FillRectangle(_BackgroundBrush, panel.Left, panel.Top, panel.Width, panel.Height);
 
             for (int i = 0; i < 4; i++) {
                 g.DrawLine(_ResizeCornerPen,
