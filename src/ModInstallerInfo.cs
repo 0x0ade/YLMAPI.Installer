@@ -17,8 +17,7 @@ namespace MonoMod.Installer {
 
         public abstract string ExecutableName { get; }
         public abstract string[] Assemblies { get; }
-        public abstract string GameIDSteam { get; }
-        public abstract string GameIDGOG { get; }
+        public abstract Dictionary<string, string> GameIDs { get; }
 
         public abstract ModVersion[] ModVersions { get; }
 

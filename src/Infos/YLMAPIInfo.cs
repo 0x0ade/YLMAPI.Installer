@@ -4,7 +4,7 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 
-namespace MonoMod.Installer {
+namespace MonoMod.Installer.YLMAPI {
     public class YLMAPIInfo : ModInstallerInfo {
 
         public readonly static Random RNG = new Random();
@@ -55,23 +55,18 @@ namespace MonoMod.Installer {
             }
         }
 
-        public override string GameIDSteam {
+        public override Dictionary<string, string> GameIDs {
             get {
-                return "Yooka-Laylee";
-            }
-        }
-
-        public override string GameIDGOG {
-            get {
-                // HKEY_LOCAL_MACHINE\SOFTWARE\WOW6432Node\GOG.com\Games\1445853962
-                // exe or EXE
-                return "1445853962";
+                return new Dictionary<string, string>() {
+                    { "steam", "Yooka-Laylee" },
+                    { "gog", "1445853962" } // HKEY_LOCAL_MACHINE\SOFTWARE\WOW6432Node\GOG.com\Games\1445853962 -> exe or EXE
+                };
             }
         }
 
         public override ModVersion[] ModVersions {
             get {
-                throw new NotImplementedException();
+                return new ModVersion[0];
             }
         }
 

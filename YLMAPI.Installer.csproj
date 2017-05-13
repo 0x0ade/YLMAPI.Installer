@@ -7,7 +7,7 @@
     <ProjectGuid>{C58D7D41-C288-4779-B1CF-9374AA5DBEDE}</ProjectGuid>
     <OutputType>WinExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>YLMAPI.Installer</RootNamespace>
+    <RootNamespace>MonoMod.Installer</RootNamespace>
     <AssemblyName>YLMAPI.Installer</AssemblyName>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
@@ -73,6 +73,11 @@
     <Compile Include="src\CustomControls\CustomPanel.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="src\Finders\GOGFinder.cs" />
+    <Compile Include="src\Finders\SteamFinder.cs" />
+    <Compile Include="src\GameFinder.cs" />
+    <Compile Include="src\GameFinderManager.cs" />
+    <Compile Include="src\Infos\CachedInfo.cs" />
     <Compile Include="src\Infos\YLMAPIInfo.cs" />
     <Compile Include="src\ModInstallerInfo.cs" />
     <Compile Include="src\MainForm.cs">
@@ -133,6 +138,7 @@
       <Install>true</Install>
     </BootstrapperPackage>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

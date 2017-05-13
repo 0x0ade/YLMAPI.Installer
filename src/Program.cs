@@ -12,7 +12,7 @@ namespace MonoMod.Installer {
         static void Main() {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new MainForm(new YLMAPIInfo()));
+            Application.Run(new MainForm(new YLMAPI.YLMAPIInfo()));
         }
     }
 }

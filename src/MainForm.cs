@@ -41,7 +41,7 @@ namespace MonoMod.Installer {
         private Font _Font;
 
         public MainForm(ModInstallerInfo info) {
-            Info = info;
+            Info = new CachedInfo(info);
 
             InitializeComponent();
 
