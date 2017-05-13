@@ -8,7 +8,7 @@ using System.Text;
 using System.Threading;
 using System.Windows.Forms;
 
-namespace YLMAPI.Installer {
+namespace MonoMod.Installer {
     public static class CustomRenderExt {
 
         public static Bitmap Scaled(this Image img, float scale) {

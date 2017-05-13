@@ -51,7 +51,7 @@
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <PropertyGroup>
-    <StartupObject>YLMAPI.Installer.Program</StartupObject>
+    <StartupObject>MonoMod.Installer.Program</StartupObject>
   </PropertyGroup>
   <PropertyGroup>
     <ApplicationIcon>icon.ico</ApplicationIcon>
@@ -64,15 +64,17 @@
   <ItemGroup>
     <Compile Include="src\CustomRenderExt.cs" />
     <Compile Include="src\AnimationManager.cs" />
-    <Compile Include="src\CustomLabel.cs">
+    <Compile Include="src\CustomControls\CustomLabel.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="src\CustomPictureBox.cs">
+    <Compile Include="src\CustomControls\CustomPictureBox.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="src\CustomPanel.cs">
+    <Compile Include="src\CustomControls\CustomPanel.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="src\Infos\YLMAPIInfo.cs" />
+    <Compile Include="src\ModInstallerInfo.cs" />
     <Compile Include="src\MainForm.cs">
       <SubType>Form</SubType>
     </Compile>

@@ -10,7 +10,7 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 
-namespace YLMAPI.Installer {
+namespace MonoMod.Installer {
     public partial class MainForm : Form {
 
         protected override CreateParams CreateParams {
@@ -28,6 +28,8 @@ namespace YLMAPI.Installer {
 
         public readonly static Random RNG = new Random();
 
+        public readonly ModInstallerInfo Info;
+
         public bool DrawFPS = true;
 
         public Size BackgroundSize;
@@ -38,11 +40,20 @@ namespace YLMAPI.Installer {
         private PrivateFontCollection _Fonts;
         private Font _Font;
 
-        public MainForm() {
+        public MainForm(ModInstallerInfo info) {
+            Info = info;
+
             InitializeComponent();
 
             SuspendLayout();
-            MinimumSize = MaximumSize = Size = new Size(460, 600);
+
+            MinimumSize = MaximumSize = Size = new Size((int) (460 * AutoScaleFactor.Width), (int) (600 * AutoScaleFactor.Height));
+
+            Text = Info.ModInstallerName;
+            MainStep1Label.Text = string.Format(MainStep1Label.Text, Info.ExecutableName);
+            BackgroundImage = Info.BackgroundImage;
+            HeaderPicture.Image = Info.HeaderImage;
+
             ResumeLayout(false);
         }
 
@@ -86,9 +97,6 @@ namespace YLMAPI.Installer {
                     throw new Exception("Thanks, Windows Mono!");
                 };
             }
-
-            if (RNG.NextDouble() < 0.5D)
-                BackgroundImage = Properties.Resources.background_2;
 
             BackgroundSize = new Size(
                 (int) (BackgroundImage.Width * 4f),

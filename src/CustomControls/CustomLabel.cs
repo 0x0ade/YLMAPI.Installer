@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 
-namespace YLMAPI.Installer {
+namespace MonoMod.Installer {
     public class CustomLabel : Label {
 
         /*

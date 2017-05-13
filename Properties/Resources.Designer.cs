@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace YLMAPI.Installer.Properties {
+namespace MonoMod.Installer.Properties {
     using System;
     
     

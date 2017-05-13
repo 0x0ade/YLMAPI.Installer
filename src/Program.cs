@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
 
-namespace YLMAPI.Installer {
+namespace MonoMod.Installer {
     static class Program {
         /// <summary>
         /// The main entry point for the application.
@@ -12,7 +12,7 @@ namespace YLMAPI.Installer {
         static void Main() {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new MainForm());
+            Application.Run(new MainForm(new YLMAPIInfo()));
         }
     }
 }
