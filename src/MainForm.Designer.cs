@@ -36,6 +36,8 @@
             this.MainStep1Label = new YLMAPI.Installer.CustomLabel();
             this.HeaderPanel = new YLMAPI.Installer.CustomPanel();
             this.HeaderPicture = new YLMAPI.Installer.CustomPictureBox();
+            this.customLabel1 = new YLMAPI.Installer.CustomLabel();
+            this.ProgressPanel.SuspendLayout();
             this.MainPanel.SuspendLayout();
             this.MainPathPanel.SuspendLayout();
             this.HeaderPanel.SuspendLayout();
@@ -45,6 +47,7 @@
             // ProgressPanel
             // 
             this.ProgressPanel.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.ProgressPanel.Controls.Add(this.customLabel1);
             this.ProgressPanel.Location = new System.Drawing.Point(461, 130);
             this.ProgressPanel.Margin = new System.Windows.Forms.Padding(1, 1, 1, 0);
             this.ProgressPanel.Name = "ProgressPanel";
@@ -70,7 +73,8 @@
             // 
             this.MainPathPanel.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(86)))), ((int)(((byte)(86)))), ((int)(((byte)(86)))));
             this.MainPathPanel.Controls.Add(this.MainPathBox);
-            this.MainPathPanel.Location = new System.Drawing.Point(36, 26);
+            this.MainPathPanel.Location = new System.Drawing.Point(32, 29);
+            this.MainPathPanel.Margin = new System.Windows.Forms.Padding(1, 4, 1, 0);
             this.MainPathPanel.Name = "MainPathPanel";
             this.MainPathPanel.Padding = new System.Windows.Forms.Padding(8, 4, 0, 0);
             this.MainPathPanel.Size = new System.Drawing.Size(340, 31);
@@ -94,6 +98,7 @@
             // 
             this.MainUninstallButton.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
             this.MainUninstallButton.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(127)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
+            this.MainUninstallButton.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(45)))));
             this.MainUninstallButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.MainUninstallButton.Font = new System.Drawing.Font("Selawik Semilight", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.MainUninstallButton.ForeColor = System.Drawing.Color.White;
@@ -103,20 +108,23 @@
             this.MainUninstallButton.TabIndex = 4;
             this.MainUninstallButton.Text = "Uninstall";
             this.MainUninstallButton.UseVisualStyleBackColor = false;
+            this.MainUninstallButton.Click += new System.EventHandler(this.MainUninstallButton_Click);
             // 
             // MainBrowseButton
             // 
             this.MainBrowseButton.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
             this.MainBrowseButton.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(127)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
+            this.MainBrowseButton.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(45)))));
             this.MainBrowseButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.MainBrowseButton.Font = new System.Drawing.Font("Selawik Semilight", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.MainBrowseButton.ForeColor = System.Drawing.Color.White;
-            this.MainBrowseButton.Location = new System.Drawing.Point(382, 26);
+            this.MainBrowseButton.Location = new System.Drawing.Point(382, 29);
             this.MainBrowseButton.Name = "MainBrowseButton";
             this.MainBrowseButton.Size = new System.Drawing.Size(32, 31);
             this.MainBrowseButton.TabIndex = 2;
             this.MainBrowseButton.Text = "...";
             this.MainBrowseButton.UseVisualStyleBackColor = false;
+            this.MainBrowseButton.Click += new System.EventHandler(this.MainBrowseButton_Click);
             // 
             // MainExeStatusLabel
             // 
@@ -124,7 +132,7 @@
             this.MainExeStatusLabel.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
             this.MainExeStatusLabel.Font = new System.Drawing.Font("Selawik Semilight", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.MainExeStatusLabel.ForeColor = System.Drawing.Color.White;
-            this.MainExeStatusLabel.Location = new System.Drawing.Point(32, 61);
+            this.MainExeStatusLabel.Location = new System.Drawing.Point(36, 64);
             this.MainExeStatusLabel.Margin = new System.Windows.Forms.Padding(1, 4, 1, 0);
             this.MainExeStatusLabel.Name = "MainExeStatusLabel";
             this.MainExeStatusLabel.Size = new System.Drawing.Size(56, 21);
@@ -135,6 +143,7 @@
             // 
             this.InstallButton.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
             this.InstallButton.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(127)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
+            this.InstallButton.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(45)))));
             this.InstallButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.InstallButton.Font = new System.Drawing.Font("Selawik Semilight", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.InstallButton.ForeColor = System.Drawing.Color.White;
@@ -144,6 +153,7 @@
             this.InstallButton.TabIndex = 3;
             this.InstallButton.Text = "Step 3: Install";
             this.InstallButton.UseVisualStyleBackColor = false;
+            this.InstallButton.Click += new System.EventHandler(this.InstallButton_Click);
             // 
             // MainStep1Label
             // 
@@ -151,7 +161,7 @@
             this.MainStep1Label.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
             this.MainStep1Label.Font = new System.Drawing.Font("Selawik Semilight", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.MainStep1Label.ForeColor = System.Drawing.Color.White;
-            this.MainStep1Label.Location = new System.Drawing.Point(32, 3);
+            this.MainStep1Label.Location = new System.Drawing.Point(32, 4);
             this.MainStep1Label.Margin = new System.Windows.Forms.Padding(1, 4, 1, 0);
             this.MainStep1Label.Name = "MainStep1Label";
             this.MainStep1Label.Size = new System.Drawing.Size(233, 21);
@@ -179,6 +189,19 @@
             this.HeaderPicture.TabIndex = 0;
             this.HeaderPicture.TabStop = false;
             // 
+            // customLabel1
+            // 
+            this.customLabel1.AutoSize = true;
+            this.customLabel1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.customLabel1.Font = new System.Drawing.Font("Selawik Semilight", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.customLabel1.ForeColor = System.Drawing.Color.White;
+            this.customLabel1.Location = new System.Drawing.Point(32, 4);
+            this.customLabel1.Margin = new System.Windows.Forms.Padding(1, 4, 1, 0);
+            this.customLabel1.Name = "customLabel1";
+            this.customLabel1.Size = new System.Drawing.Size(56, 21);
+            this.customLabel1.TabIndex = 6;
+            this.customLabel1.Text = "Status:";
+            // 
             // MainForm
             // 
             this.AllowDrop = true;
@@ -199,6 +222,8 @@
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "YLMAPI.Installer";
             this.Load += new System.EventHandler(this.MainForm_Load);
+            this.ProgressPanel.ResumeLayout(false);
+            this.ProgressPanel.PerformLayout();
             this.MainPanel.ResumeLayout(false);
             this.MainPanel.PerformLayout();
             this.MainPathPanel.ResumeLayout(false);
@@ -222,6 +247,7 @@
         private System.Windows.Forms.Button MainUninstallButton;
         private System.Windows.Forms.Panel MainPathPanel;
         private System.Windows.Forms.TextBox MainPathBox;
+        private CustomLabel customLabel1;
     }
 }
 

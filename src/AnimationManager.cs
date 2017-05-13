@@ -15,7 +15,7 @@ namespace YLMAPI.Installer {
 
         private static Stopwatch _Stopwatch;
         public static float Time { get; private set; }
-        public static float FrameTimeSlow = 1f / 5f;
+        public static float FrameTimeThrottled = 1f / 30f;
         public static float FrameTime = 1f / 60f;
         public static float FrameTimeSmooth = 1f / 60f;
 
@@ -62,7 +62,7 @@ namespace YLMAPI.Installer {
             return c.Animate((a, t) => { /* Wait. */ }, dur: delay, smooth: false, run: run);
         }
 
-        public static Animation SlideIn(this Control c, float dur, int from = 0, int to = 1, float delay = 0f, bool run = true) {
+        public static Animation SlideIn(this Control c, float dur = 0.75f, int from = 0, int to = 1, float delay = 0f, bool run = true) {
             if (from == 0) {
                 if (c.Left != to)
                     from = c.Left;
@@ -90,7 +90,7 @@ namespace YLMAPI.Installer {
             }, run: run);
         }
 
-        public static Animation SlideOut(this Control c, float dur, int from = 1, int to = -461, float delay = 0f, bool run = true) {
+        public static Animation SlideOut(this Control c, float dur = 0.75f, int from = 1, int to = -461, float delay = 0f, bool run = true) {
             int offs = from - to;
             if (run)
                 c.Left = from;
@@ -139,10 +139,9 @@ namespace YLMAPI.Installer {
 
             while (_Thread != null) {
                 if (IsThrottled)
-                    frameTimeF = FrameTimeSlow;
+                    frameTimeF = FrameTimeThrottled;
 
                 frameTime = (long) (frameTimeF * 1000L);
-                
                 while ((frameLeft = frameTime - (_Stopwatch.ElapsedMilliseconds - frameStart)) > 0)
                     Thread.Sleep((int) frameLeft);
                 frameStartPrev = frameStart;

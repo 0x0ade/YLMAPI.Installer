@@ -42,7 +42,7 @@ namespace YLMAPI.Installer {
             InitializeComponent();
 
             SuspendLayout();
-            MinimumSize = Size = new Size(460, 600);
+            MinimumSize = MaximumSize = Size = new Size(460, 600);
             ResumeLayout(false);
         }
 
@@ -109,22 +109,80 @@ namespace YLMAPI.Installer {
             this.Animate((a, t) => Opacity = t, dur: 0.4f, smooth: true);
             this.Animate((a, t) => BackgroundSizeFactor = 1f + 8f * (1f - t), dur: 2f, easing: Easings.QuinticEaseOut, smooth: true);
 
-            HeaderPanel.SlideIn(1f, delay: 0.05f);
+            HeaderPanel.SlideIn(delay: 0.05f);
 
-            MainPanel.SlideIn(1f, delay: 0.1f);
+            MainPanel.SlideIn(delay: 0.1f);
 
+            this.Animate(UpdateBackground, loop: true, smooth: false);
         }
 
-        private Pen _ResizeCornerPen = new Pen(Color.FromArgb(127, 255, 255, 255));
-        private SolidBrush _BackgroundBrush = new SolidBrush(Color.FromArgb(127, 0, 0, 0));
+
+        private PointF _BackgroundOffs;
+        private SolidBrush _BackgroundBrush = new SolidBrush(Color.FromArgb(127, 45, 45, 45));
         private SolidBrush _FPSBrush = new SolidBrush(Color.FromArgb(127, 255, 255, 255));
+        private SolidBrush _ProgressShapeBrush = new SolidBrush(Color.FromArgb(127, 255, 255, 255));
         private long _FrameStart;
         private long _FrameStartPrev;
         private float _CurrentFrameTime;
+
+        private int[] _ProgressShapeSizes = { 7, 4, 10, 3, 16, 7, 5, 7 };
+        private PointF[][] _ProgressShapes;
+        private PointF[] _ProgressShapeCurrent;
+        private bool _ProgressShapesInit;
+
+        public void UpdateBackground(Animation a, float t) {
+            Point cursor = PointToClient(Cursor.Position);
+            _BackgroundOffs = new PointF(
+                cursor.X - Width / 2f,
+                cursor.Y - Height / 2f
+            );
+
+            if (!_ProgressShapesInit) {
+                _ProgressShapes = new PointF[_ProgressShapeSizes.Length][];
+                for (int si = _ProgressShapeSizes.Length - 1; si > -1; --si) {
+                    PointF[] current = _ProgressShapes[si] = new PointF[_ProgressShapeSizes[si]];
+                    for (int i = current.Length - 1; i > -1; --i) {
+                        float f = (i / (float) current.Length) * (float) Math.PI * 2f;
+                        current[i] = new PointF(
+                            (float) (128f * Math.Cos(f)),
+                            (float) (128f * Math.Sin(f))
+                        );
+                    }
+                }
+                _ProgressShapeCurrent = _ProgressShapes[0];
+                _ProgressShapesInit = true;
+
+            } else {
+                float pulse = Easings.CubicEaseIn(Math.Max(0f, 1f - (AnimationManager.Time % 3f) / 3f));
+                int currentIndex = (int) (pulse * _ProgressShapes.Length);
+                PointF[] current = _ProgressShapes[currentIndex];
+                for (int i = current.Length - 1; i > -1; --i) {
+                    float f = (i / (float) current.Length) * (float) Math.PI * 2f;
+                    f += AnimationManager.Time * 0.1f;
+                    PointF from = current[i];
+                    PointF to = new PointF(
+                        (float) (128f * Math.Cos(f)),
+                        (float) (128f * Math.Sin(f))
+                    );
+                    PointF offs = new PointF(
+                        32f * (float) (RNG.NextDouble() - 0.5f),
+                        32f * (float) (RNG.NextDouble() - 0.5f)
+                    );
+                    current[i] = new PointF(
+                        from.X + (to.X - from.X) * 0.1f + pulse * offs.X,
+                        from.Y + (to.Y - from.Y) * 0.1f + pulse * offs.Y
+                    );
+                }
+                _ProgressShapeCurrent = current;
+            }
+        }
+
         protected override void OnPaintBackground(PaintEventArgs e) {
-            _FrameStartPrev = _FrameStart;
-            _FrameStart = _Stopwatch.ElapsedMilliseconds;
-            _CurrentFrameTime = (_FrameStart - _FrameStartPrev) * 0.001f;
+            if (e.ClipRectangle.Size == Size) {
+                _FrameStartPrev = _FrameStart;
+                _FrameStart = _Stopwatch.ElapsedMilliseconds;
+                _CurrentFrameTime = (_FrameStart - _FrameStartPrev) * 0.001f;
+            }
 
             Graphics g = e.Graphics;
 
@@ -136,7 +194,6 @@ namespace YLMAPI.Installer {
             g.SmoothingMode = SmoothingMode.HighSpeed;
             // Free perf boost!
 
-            Point cursor = PointToClient(Cursor.Position);
             g.DrawBackgroundImage(
                 BackgroundImage,
                 Width,
@@ -144,21 +201,28 @@ namespace YLMAPI.Installer {
                 (int) (BackgroundSize.Width * BackgroundSizeFactor),
                 (int) (BackgroundSize.Height * BackgroundSizeFactor),
                 ImageLayout.Center,
-                -cursor.X * 0.1f,
-                -cursor.Y * 0.1f
+                _BackgroundOffs.X * -0.1f,
+                _BackgroundOffs.Y * -0.1f
             );
+
+            // g.FillRectangle(_BackgroundBrush, 1, 1, Width - 2, Height - 2);
 
             foreach (Panel panel in Controls)
                 if (panel.Visible)
                     g.FillRectangle(_BackgroundBrush, panel.Left, panel.Top, panel.Width, panel.Height);
 
-            for (int i = 0; i < 4; i++) {
-                g.DrawLine(_ResizeCornerPen,
-                    Width - 8,
-                    Height - 1,
-                    Width - 1,
-                    Height - 8
+            if (_ProgressShapesInit && ProgressPanel.Visible) {
+                g.SmoothingMode = SmoothingMode.AntiAlias;
+                Matrix transformPrev = g.Transform;
+
+                g.TranslateTransform(
+                    ProgressPanel.Left + Width * 0.5f + _BackgroundOffs.X * -0.03f,
+                    Height * 0.5f + _BackgroundOffs.Y * -0.03f
                 );
+                g.FillPolygon(_ProgressShapeBrush, _ProgressShapeCurrent);
+
+                g.Transform = transformPrev;
+                g.SmoothingMode = SmoothingMode.HighSpeed;
             }
 
             if (DrawFPS) {
@@ -192,13 +256,28 @@ namespace YLMAPI.Installer {
                     m.Result = HTCAPTION;
                     return;
                 }
+                /*
                 if (cursor.X >= ClientSize.Width - 32 && cursor.Y >= ClientSize.Height - 32) {
                     m.Result = HTBOTTOMRIGHT;
                     return;
                 }
+                */
             }
 
             base.WndProc(ref m);
+        }
+
+        private void InstallButton_Click(object sender, EventArgs e) {
+            MainPanel.SlideOut();
+            ProgressPanel.SlideIn();
+        }
+
+        private void MainBrowseButton_Click(object sender, EventArgs e) {
+
+        }
+
+        private void MainUninstallButton_Click(object sender, EventArgs e) {
+
         }
     }
 }
