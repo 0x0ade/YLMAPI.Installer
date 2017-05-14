@@ -24,7 +24,12 @@ namespace MonoMod.Installer {
 
         public static string Find(Dictionary<string, string> idmap) {
             for (int i = 0; i < Finders.Count; i++) {
-                // TODO
+                GameFinder finder = Finders[i];
+                string s;
+                if (!idmap.TryGetValue(finder.ID, out s))
+                    continue;
+                if ((s = finder.Find(s)) != null)
+                    return s;
             }
 
             return null;
