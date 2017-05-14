@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Text;
@@ -22,14 +23,18 @@ namespace MonoMod.Installer {
             }
         }
 
-        public static string Find(Dictionary<string, string> idmap) {
+        public static string Find(Dictionary<string, string> idmap, string exe = null) {
             for (int i = 0; i < Finders.Count; i++) {
                 GameFinder finder = Finders[i];
                 string s;
                 if (!idmap.TryGetValue(finder.ID, out s))
                     continue;
-                if ((s = finder.Find(s)) != null)
-                    return s;
+                if ((s = finder.Find(s)) != null) {
+                    if (!string.IsNullOrEmpty(exe))
+                        s = Path.Combine(s, exe);
+                    if (File.Exists(s) || Directory.Exists(s))
+                        return s;
+                }
             }
 
             return null;

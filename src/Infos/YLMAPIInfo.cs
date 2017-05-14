@@ -59,7 +59,7 @@ namespace MonoMod.Installer.YLMAPI {
             get {
                 return new Dictionary<string, string>() {
                     { "steam", "Yooka-Laylee" },
-                    { "gog", "1445853962" } // HKEY_LOCAL_MACHINE\SOFTWARE\WOW6432Node\GOG.com\Games\1445853962 -> exe or EXE
+                    { "gog", "1445853962" }
                 };
             }
         }

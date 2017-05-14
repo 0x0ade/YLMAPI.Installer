@@ -124,6 +124,8 @@ namespace MonoMod.Installer {
             _IntroSlideAnimation = MainPanel.SlideIn(delay: 0.1f);
 
             this.Animate(UpdateBackground, loop: true, smooth: false);
+
+            MainPathBox.Text = GameFinderManager.Find(Info.GameIDs, Info.ExecutableName);
         }
 
 
