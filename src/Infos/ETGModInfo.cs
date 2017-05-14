@@ -4,26 +4,26 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 
-namespace MonoMod.Installer.YLMAPI {
-    public class YLMAPIInfo : GameModInfo {
+namespace MonoMod.Installer.ETGMod {
+    public class ETGModInfo : GameModInfo {
 
         public readonly static Random RNG = new Random();
 
         public override string GameName {
             get {
-                return "Yooka-Laylee";
+                return "Enter the Gungeon";
             }
         }
 
         public override string ModName {
             get {
-                return "YLMAPI";
+                return "Mod the Gungeon";
             }
         }
 
         public override string ModInstallerName {
             get {
-                return "YLMAPI.Installer";
+                return "ETGMod.Installer";
             }
         }
 
@@ -44,9 +44,7 @@ namespace MonoMod.Installer.YLMAPI {
         public override string ExecutableDir {
             get {
                 if ((PlatformHelper.Current & Platform.MacOS) == Platform.MacOS)
-                    // From ETG:
-                    // /Users/$USER/Library/Application Support/Steam/SteamApps/common/Enter the Gungeon/EtG_OSX.app/Contents/MacOS/EtG_OSX
-                    return "YookaLaylee_OSX.app/Contents/MacOS";
+                    return "EtG_OSX.app/Contents/MacOS";
 
                 return null;
             }
@@ -54,22 +52,19 @@ namespace MonoMod.Installer.YLMAPI {
 
         public override string ExecutableName {
             get {
-                string env = Environment.GetEnvironmentVariable("YLMAPI_EXE");
+                string env = Environment.GetEnvironmentVariable("ETGMOD_EXE");
                 if (!string.IsNullOrEmpty(env))
                     return env;
 
                 if ((PlatformHelper.Current & Platform.Windows) == Platform.Windows)
                     // TODO: Is the 32-bit Windows executable also named YookaLaylee64.exe?
-                    return "YookaLaylee64.exe";
+                    return "EtG.exe";
 
-                // TODO: What are the macOS and Linux executable names?
                 if ((PlatformHelper.Current & Platform.MacOS) == Platform.MacOS)
-                    // From ETG:
-                    // /Users/$USER/Library/Application Support/Steam/SteamApps/common/Enter the Gungeon/EtG_OSX.app/Contents/MacOS/EtG_OSX
-                    return "YookaLaylee_OSX";
+                    return "EtG_OSX";
 
                 if ((PlatformHelper.Current & Platform.Linux) == Platform.Linux)
-                    return IntPtr.Size == 4 /*(32 bit)*/ ? "YookaLaylee.x86" : "YookaLaylee.x86_64";
+                    return IntPtr.Size == 4 /*(32 bit)*/ ? "EtG.x86" : "EtG.x86_64";
 
                 return null;
             }
@@ -79,17 +74,17 @@ namespace MonoMod.Installer.YLMAPI {
             get {
                 if ((PlatformHelper.Current & Platform.Windows) == Platform.Windows)
                     return new string[] {
-                        "YookaLaylee64_Data/Managed/Assembly-CSharp.dll"
+                        "EtG_Data/Managed/Assembly-CSharp.dll"
                     };
 
                 if ((PlatformHelper.Current & Platform.MacOS) == Platform.MacOS)
                     return new string[] {
-                        "YookaLaylee_OSX.app/Contents/Resources/Data/Managed/Assembly-CSharp.dll"
+                        "EtG_OSX.app/Contents/Resources/Data/Managed/Assembly-CSharp.dll"
                     };
 
                 if ((PlatformHelper.Current & Platform.Linux) == Platform.Linux)
                     return new string[] {
-                        "YookaLaylee_Data/Managed/Assembly-CSharp.dll"
+                        "EtG_Data/Managed/Assembly-CSharp.dll"
                     };
 
                 return null;
@@ -99,8 +94,8 @@ namespace MonoMod.Installer.YLMAPI {
         public override Dictionary<string, string> GameIDs {
             get {
                 return new Dictionary<string, string>() {
-                    { "steam", "YookaLaylee" },
-                    { "gog", "1445853962" }
+                    { "steam", "Enter the Gungeon" },
+                    { "gog", "1456912569" }
                 };
             }
         }

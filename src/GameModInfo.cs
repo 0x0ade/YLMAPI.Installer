@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Text;
 
@@ -21,6 +22,26 @@ namespace MonoMod.Installer {
         public abstract Dictionary<string, string> GameIDs { get; }
 
         public abstract ModVersion[] ModVersions { get; }
+
+        public virtual string CurrentExecutablePath { get; set; }
+        public virtual string CurrentGamePath {
+            get {
+                string path = CurrentExecutablePath;
+                if (string.IsNullOrEmpty(CurrentExecutablePath) || !File.Exists(path))
+                    return null;
+
+                if (!string.IsNullOrEmpty(ExecutableName))
+                    path = Path.GetDirectoryName(path);
+
+                string exeDir = ExecutableDir;
+                while (!string.IsNullOrEmpty(exeDir)) {
+                    path = Path.GetDirectoryName(path);
+                    exeDir = Path.GetDirectoryName(exeDir);
+                }
+
+                return path;
+            }
+        }
 
         public class ModVersion {
             public string Name;

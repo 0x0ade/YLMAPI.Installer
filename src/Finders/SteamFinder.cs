@@ -37,7 +37,6 @@ namespace MonoMod.Installer {
             }
         }
 
-
         public List<string> LibraryDirs {
             get {
                 List<string> dirs = new List<string>();
@@ -56,7 +55,6 @@ namespace MonoMod.Installer {
                         dirs.Add(steamapps);
                 }
 
-
                 string config = Path.Combine(steam, "config");
                 config = Path.Combine(config, "config.vdf");
                 if (!File.Exists(config))
@@ -64,10 +62,12 @@ namespace MonoMod.Installer {
 
                 using (StreamReader reader = new StreamReader(config))
                     while (!reader.EndOfStream) {
-                        string line = reader.ReadLine().Trim();
-                        Match match = BaseInstallFolderRegex.Match(line);
-                        if (match.Success)
-                            dirs.Add(Regex.Unescape(match.Groups[1].Value));
+                        string path = reader.ReadLine().Trim();
+                        Match match = BaseInstallFolderRegex.Match(path);
+                        if (!match.Success)
+                            continue;
+                        path = Regex.Unescape(match.Groups[1].Value);
+                        dirs.Add(GetSteamappsCommon(path) ?? path);
                     }
 
                 return dirs;
@@ -77,11 +77,24 @@ namespace MonoMod.Installer {
         public override string FindGameDir(string gameid) {
             List<string> dirs = LibraryDirs;
             for (int i = 0; i < dirs.Count; i++) {
-                string path = Path.Combine(dirs[0], gameid);
+                string path = Path.Combine(dirs[i], gameid);
                 if (Directory.Exists(path))
                     return path;
             }
             return null;
+        }
+
+        public static string GetSteamappsCommon(string path) {
+            string dir = Path.Combine(path, "SteamApps");
+            if (!Directory.Exists(dir))
+                // Unix is case-sensitive.
+                dir = Path.Combine(path, "steamapps");
+            if (!Directory.Exists(dir))
+                return null;
+            dir = Path.Combine(dir, "common");
+            if (!Directory.Exists(dir))
+                return null;
+            return dir;
         }
 
     }

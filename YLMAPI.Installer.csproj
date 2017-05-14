@@ -78,6 +78,7 @@
     <Compile Include="src\GameFinder.cs" />
     <Compile Include="src\GameFinderManager.cs" />
     <Compile Include="src\Infos\CachedInfo.cs" />
+    <Compile Include="src\Infos\ETGModInfo.cs" />
     <Compile Include="src\Infos\YLMAPIInfo.cs" />
     <Compile Include="src\GameModInfo.cs" />
     <Compile Include="src\MainForm.cs">

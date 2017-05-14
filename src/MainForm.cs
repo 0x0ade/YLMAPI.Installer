@@ -90,7 +90,7 @@ namespace MonoMod.Installer {
                     _Fonts.AddMemoryFont(new IntPtr(dataptr), data.Length);
             }
             _Font = new Font(_Fonts.Families[0], 12f);
-            Controls.ForEachDeep(c => c.Font.SystemFontName == "DefaultFont" || c.Font.FontFamily.Name == _Font.FontFamily.Name, c => c.Font = _Font);
+            Controls.ForEachDeep(c => c.Font = _Font);
 
             if (Environment.OSVersion.Platform == PlatformID.Win32NT &&
                 AnimationManager.IsMono) {
@@ -278,13 +278,13 @@ namespace MonoMod.Installer {
             base.WndProc(ref m);
         }
 
+        private void MainBrowseButton_Click(object sender, EventArgs e) {
+            
+        }
+
         private void InstallButton_Click(object sender, EventArgs e) {
             MainPanel.SlideOut();
             ProgressPanel.SlideIn();
-        }
-
-        private void MainBrowseButton_Click(object sender, EventArgs e) {
-
         }
 
         private void MainUninstallButton_Click(object sender, EventArgs e) {
