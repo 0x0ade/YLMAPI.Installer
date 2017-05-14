@@ -79,7 +79,7 @@
     <Compile Include="src\GameFinderManager.cs" />
     <Compile Include="src\Infos\CachedInfo.cs" />
     <Compile Include="src\Infos\YLMAPIInfo.cs" />
-    <Compile Include="src\ModInstallerInfo.cs" />
+    <Compile Include="src\GameModInfo.cs" />
     <Compile Include="src\MainForm.cs">
       <SubType>Form</SubType>
     </Compile>

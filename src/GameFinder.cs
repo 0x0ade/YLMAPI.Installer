@@ -8,7 +8,7 @@ namespace MonoMod.Installer {
 
         public abstract string ID { get; }
 
-        public abstract string Find(string gameid);
+        public abstract string FindGameDir(string gameid);
 
     }
 }

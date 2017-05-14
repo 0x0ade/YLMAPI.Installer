@@ -23,15 +23,21 @@ namespace MonoMod.Installer {
             }
         }
 
-        public static string Find(Dictionary<string, string> idmap, string exe = null) {
+        public static string Find(GameModInfo info) {
+            Dictionary<string, string> gameids = info.GameIDs;
+            string exedir = info.ExecutableDir;
+            string exename = info.ExecutableName;
+
             for (int i = 0; i < Finders.Count; i++) {
                 GameFinder finder = Finders[i];
                 string s;
-                if (!idmap.TryGetValue(finder.ID, out s))
+                if (!gameids.TryGetValue(finder.ID, out s))
                     continue;
-                if ((s = finder.Find(s)) != null) {
-                    if (!string.IsNullOrEmpty(exe))
-                        s = Path.Combine(s, exe);
+                if ((s = finder.FindGameDir(s)) != null) {
+                    if (!string.IsNullOrEmpty(exedir))
+                        s = Path.Combine(s, exedir);
+                    if (!string.IsNullOrEmpty(exename))
+                        s = Path.Combine(s, exename);
                     if (File.Exists(s) || Directory.Exists(s))
                         return s;
                 }

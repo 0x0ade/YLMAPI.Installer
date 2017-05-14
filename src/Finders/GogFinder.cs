@@ -10,7 +10,7 @@ namespace MonoMod.Installer {
 
         public override string ID => "gog";
 
-        public override string Find(string gameid) {
+        public override string FindGameDir(string gameid) {
             if ((PlatformHelper.Current & Platform.Windows) != Platform.Windows)
                 return null;
             string regKey =

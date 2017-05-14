@@ -28,7 +28,7 @@ namespace MonoMod.Installer {
 
         public readonly static Random RNG = new Random();
 
-        public readonly ModInstallerInfo Info;
+        public readonly GameModInfo Info;
 
         public bool DrawFPS = true;
 
@@ -42,7 +42,7 @@ namespace MonoMod.Installer {
 
         private Animation _IntroSlideAnimation;
 
-        public MainForm(ModInstallerInfo info) {
+        public MainForm(GameModInfo info) {
             Info = new CachedInfo(info);
 
             InitializeComponent();
@@ -125,7 +125,7 @@ namespace MonoMod.Installer {
 
             this.Animate(UpdateBackground, loop: true, smooth: false);
 
-            MainPathBox.Text = GameFinderManager.Find(Info.GameIDs, Info.ExecutableName);
+            MainPathBox.Text = GameFinderManager.Find(Info);
         }
 
 

@@ -5,9 +5,9 @@ using System.Linq;
 using System.Text;
 
 namespace MonoMod.Installer {
-    internal sealed class CachedInfo : ModInstallerInfo {
+    internal sealed class CachedInfo : GameModInfo {
 
-        internal ModInstallerInfo _From;
+        internal GameModInfo _From;
 
         internal string _GameName;
         public override string GameName => _GameName;
@@ -23,6 +23,9 @@ namespace MonoMod.Installer {
 
         internal Image _BackgroundImage;
         public override Image BackgroundImage => _BackgroundImage;
+
+        internal string _ExecutableDir;
+        public override string ExecutableDir => _ExecutableDir;
 
         internal string _ExecutableName;
         public override string ExecutableName => _ExecutableName;
@@ -42,13 +45,14 @@ namespace MonoMod.Installer {
             }
         }
 
-        public CachedInfo(ModInstallerInfo from) {
+        public CachedInfo(GameModInfo from) {
             _From = from;
             _GameName = from.GameName;
             _ModName = from.ModName;
             _ModInstallerName = from.ModInstallerName;
             _HeaderImage = from.HeaderImage;
             _BackgroundImage = from.BackgroundImage;
+            _ExecutableDir = from.ExecutableDir;
             _ExecutableName = from.ExecutableName;
             _Assemblies = from.Assemblies;
             _GameIDs = from.GameIDs;

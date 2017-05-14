@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 
 namespace MonoMod.Installer {
-    public abstract class ModInstallerInfo {
+    public abstract class GameModInfo {
 
         public abstract string GameName { get; }
 
@@ -15,6 +15,7 @@ namespace MonoMod.Installer {
         public abstract Image HeaderImage { get; }
         public abstract Image BackgroundImage { get; }
 
+        public abstract string ExecutableDir { get; }
         public abstract string ExecutableName { get; }
         public abstract string[] Assemblies { get; }
         public abstract Dictionary<string, string> GameIDs { get; }

@@ -25,6 +25,14 @@ namespace MonoMod.Installer {
                     return (string) Registry.GetValue(regKey, "InstallPath", null);
                 }
 
+                if ((PlatformHelper.Current & Platform.MacOS) == Platform.MacOS) {
+                    return Path.Combine(Environment.GetEnvironmentVariable("HOME"), "Library/Application Support/Steam");
+                }
+
+                if ((PlatformHelper.Current & Platform.Linux) == Platform.Linux) {
+                    return Path.Combine(Environment.GetEnvironmentVariable("HOME"), ".local/share/Steam");
+                }
+
                 return null;
             }
         }
@@ -66,7 +74,7 @@ namespace MonoMod.Installer {
             }
         }
 
-        public override string Find(string gameid) {
+        public override string FindGameDir(string gameid) {
             List<string> dirs = LibraryDirs;
             for (int i = 0; i < dirs.Count; i++) {
                 string path = Path.Combine(dirs[0], gameid);
