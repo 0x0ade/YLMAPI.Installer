@@ -245,9 +245,6 @@
     <None Include="Content\header.png" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Content\background_dither.png" />
-  </ItemGroup>
-  <ItemGroup>
     <None Include="Content\background_2.png" />
   </ItemGroup>
   <ItemGroup>

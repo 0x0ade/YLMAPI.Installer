@@ -40,6 +40,8 @@ namespace MonoMod.Installer {
         private PrivateFontCollection _Fonts;
         private Font _Font;
 
+        private Animation _IntroSlideAnimation;
+
         public MainForm(ModInstallerInfo info) {
             Info = new CachedInfo(info);
 
@@ -99,8 +101,8 @@ namespace MonoMod.Installer {
             }
 
             BackgroundSize = new Size(
-                (int) (BackgroundImage.Width * 4f),
-                (int) (BackgroundImage.Height * 4f)
+                2048,
+                1228
             );
 
             foreach (Panel panel in Controls) {
@@ -119,7 +121,7 @@ namespace MonoMod.Installer {
 
             HeaderPanel.SlideIn(delay: 0.05f);
 
-            MainPanel.SlideIn(delay: 0.1f);
+            _IntroSlideAnimation = MainPanel.SlideIn(delay: 0.1f);
 
             this.Animate(UpdateBackground, loop: true, smooth: false);
         }
@@ -194,14 +196,12 @@ namespace MonoMod.Installer {
 
             Graphics g = e.Graphics;
 
-            // This should obviously give a perf boost.
             g.CompositingQuality = CompositingQuality.HighSpeed;
-            // ... it still renders blurred?
             g.InterpolationMode = InterpolationMode.NearestNeighbor;
-            // And text's still fine?!?!
             g.SmoothingMode = SmoothingMode.HighSpeed;
-            // Free perf boost!
 
+            if (e.ClipRectangle.Size != Size || _IntroSlideAnimation.Status != Animation.EStatus.Finished)
+                g.InterpolationMode = InterpolationMode.Bilinear;
             g.DrawBackgroundImage(
                 BackgroundImage,
                 Width,
@@ -212,6 +212,7 @@ namespace MonoMod.Installer {
                 _BackgroundOffs.X * -0.1f,
                 _BackgroundOffs.Y * -0.1f
             );
+            g.InterpolationMode = InterpolationMode.NearestNeighbor;
 
             // g.FillRectangle(_BackgroundBrush, 1, 1, Width - 2, Height - 2);
 
