@@ -102,10 +102,14 @@ namespace MonoMod.Installer {
                 };
             }
 
+            float backgroundF = 2048f / BackgroundImage.Width;
             BackgroundSize = new Size(
-                2048,
-                1228
+                (int) (BackgroundImage.Width * backgroundF),
+                (int) (BackgroundImage.Height * backgroundF)
             );
+
+            backgroundF = 1024f / BackgroundImage.Width;
+            BackgroundImage = BackgroundImage.ScaledBlur(backgroundF, PixelFormat.Format24bppRgb);
 
             foreach (Panel panel in Controls) {
                 if (panel != HeaderPanel && panel != MainPanel)
@@ -224,9 +228,7 @@ namespace MonoMod.Installer {
             g.CompositingQuality = CompositingQuality.HighSpeed;
             g.InterpolationMode = InterpolationMode.NearestNeighbor;
             g.SmoothingMode = SmoothingMode.HighSpeed;
-
-            if (e.ClipRectangle.Size != Size || _IntroSlideAnimation.Status != Animation.EStatus.Finished)
-                g.InterpolationMode = InterpolationMode.Bilinear;
+ 
             g.DrawBackgroundImage(
                 BackgroundImage,
                 Width,

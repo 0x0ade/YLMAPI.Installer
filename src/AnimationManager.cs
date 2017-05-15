@@ -76,7 +76,7 @@ namespace MonoMod.Installer {
                 a.Control.Left = (int) (to + offs * (1f - t));
                 if (t == 0f)
                     c.Visible = true;
-            }, dur: dur, easing: Easings.SineEaseInOut, smooth: true, run: false);
+            }, dur: dur, easing: Easings.ExponentialEaseOut, smooth: true, run: false);
             if (delay <= 0f) {
                 if (run)
                     Run(anim);
@@ -98,7 +98,7 @@ namespace MonoMod.Installer {
                 a.Control.Left = (int) (to + offs * (1f - t));
                 if (t == 1f)
                     c.Visible = false;
-            }, dur: dur, easing: Easings.SineEaseInOut, smooth: true, run: false);
+            }, dur: dur, easing: Easings.ExponentialEaseOut, smooth: true, run: false);
             if (delay <= 0f) {
                 if (run)
                     Run(anim);
@@ -158,7 +158,7 @@ namespace MonoMod.Installer {
                     if (anim.Control == null || anim.Control.IsDisposed)
                         continue;
                     if (anim.Control != AnimationRoot && !controls.Contains(anim.Control)) {
-                        InvokeSuspend(anim.Control);
+                        // InvokeSuspend(anim.Control);
                         controls.Add(anim.Control);
                     }
                     if (anim.Status == Animation.EStatus.Uninitialized)
@@ -177,8 +177,8 @@ namespace MonoMod.Installer {
                     if (c == null || c.IsDisposed)
                         continue;
                     if (c != AnimationRoot) {
-                        Invalidated--;
-                        InvokeResume(c);
+                        // Invalidated--;
+                        // InvokeResume(c);
                     }
                 }
 
@@ -196,7 +196,7 @@ namespace MonoMod.Installer {
                 if (/*Invalidated > 0 ||*/ InvalidatedRoot > 0) {
                     Invalidated = 0;
                     InvalidatedRoot = 0;
-                    continue;
+                    // continue;
                 }
 
                 if (_CurrentRootInvalidate != null && !_CurrentRootInvalidate.IsCompleted)

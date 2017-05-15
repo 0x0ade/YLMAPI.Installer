@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Drawing2D;
+using System.Drawing.Imaging;
 using System.Drawing.Text;
 using System.Linq;
 using System.Text;
@@ -13,6 +14,13 @@ namespace MonoMod.Installer {
 
         public static Bitmap Scaled(this Image img, float scale) {
             return new Bitmap(img, (int) (img.Width * scale), (int) (img.Height * scale));
+        }
+
+        public static Bitmap ScaledBlur(this Image img, float scale, PixelFormat? format = null) {
+            Bitmap bmp = new Bitmap((int) (img.Width * scale), (int) (img.Height * scale), format ?? img.PixelFormat);
+            using (Graphics g = Graphics.FromImage(bmp))
+                g.DrawImage(img, 0, 0, bmp.Width, bmp.Height);
+            return bmp;
         }
 
         public static void DrawBackgroundImage(this Graphics g, Image img, int width, int height, int imgWidth = 0, int imgHeight = 0, ImageLayout layout = ImageLayout.Center, float offsX = 0f, float offsY = 0f) {
