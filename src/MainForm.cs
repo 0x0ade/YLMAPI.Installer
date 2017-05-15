@@ -42,6 +42,8 @@ namespace MonoMod.Installer {
 
         private Animation _IntroSlideAnimation;
 
+        private OpenFileDialog _BrowseDialog;
+
         public MainForm(GameModInfo info) {
             Info = new CachedInfo(info);
 
@@ -125,7 +127,28 @@ namespace MonoMod.Installer {
 
             this.Animate(UpdateBackground, loop: true, smooth: false);
 
-            MainPathBox.Text = GameFinderManager.Find(Info);
+            Info.OnChangeCurrentExecutablePath += (info, path) => {
+                MainPathBox.Text = path ?? "";
+                bool valid = !string.IsNullOrEmpty(path);
+                MainInstallButton.Enabled = valid;
+                MainUninstallButton.Enabled = valid;
+            };
+            Info.CurrentExecutablePath = GameFinderManager.Find(Info);
+
+            _BrowseDialog = new OpenFileDialog() {
+                Title = $"Select {Info.ExecutableName}",
+                AutoUpgradeEnabled = true,
+                CheckFileExists = true,
+                CheckPathExists = true,
+                ValidateNames = true,
+                Multiselect = false,
+                ShowReadOnly = false,
+                Filter = $"{Info.ExecutableName}|{Info.ExecutableName}",
+                FilterIndex = 0
+            };
+            _BrowseDialog.FileOk += (object s, CancelEventArgs e) => {
+                Info.CurrentExecutablePath = _BrowseDialog.FileNames[0];
+            };
         }
 
 
@@ -279,7 +302,7 @@ namespace MonoMod.Installer {
         }
 
         private void MainBrowseButton_Click(object sender, EventArgs e) {
-            
+            _BrowseDialog.ShowDialog(this);
         }
 
         private void InstallButton_Click(object sender, EventArgs e) {

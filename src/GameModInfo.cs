@@ -23,7 +23,25 @@ namespace MonoMod.Installer {
 
         public abstract ModVersion[] ModVersions { get; }
 
-        public virtual string CurrentExecutablePath { get; set; }
+        private string _CurrentExecutablePath;
+        public virtual string CurrentExecutablePath {
+            get {
+                return _CurrentExecutablePath ?? "";
+            }
+            set {
+                if (string.IsNullOrEmpty(value)) {
+                    _CurrentExecutablePath = null;
+                    OnChangeCurrentExecutablePath?.Invoke(this, null);
+                    return;
+                }
+
+                if (File.Exists(value) &&
+                    value.ToLowerInvariant().EndsWith(ExecutableName.ToLowerInvariant())) {
+                    _CurrentExecutablePath = value;
+                    OnChangeCurrentExecutablePath?.Invoke(this, value);
+                }
+            }
+        }
         public virtual string CurrentGamePath {
             get {
                 string path = CurrentExecutablePath;
@@ -42,6 +60,8 @@ namespace MonoMod.Installer {
                 return path;
             }
         }
+
+        public event Action<GameModInfo, string> OnChangeCurrentExecutablePath;
 
         public class ModVersion {
             public string Name;

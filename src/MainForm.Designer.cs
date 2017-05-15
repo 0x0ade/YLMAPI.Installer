@@ -36,7 +36,7 @@
             this.MainUninstallButton = new System.Windows.Forms.Button();
             this.MainBrowseButton = new System.Windows.Forms.Button();
             this.MainExeStatusLabel = new MonoMod.Installer.CustomLabel();
-            this.InstallButton = new System.Windows.Forms.Button();
+            this.MainInstallButton = new System.Windows.Forms.Button();
             this.MainStep1Label = new MonoMod.Installer.CustomLabel();
             this.HeaderPanel = new MonoMod.Installer.CustomPanel();
             this.HeaderPicture = new MonoMod.Installer.CustomPictureBox();
@@ -80,7 +80,7 @@
             this.MainPanel.Controls.Add(this.MainUninstallButton);
             this.MainPanel.Controls.Add(this.MainBrowseButton);
             this.MainPanel.Controls.Add(this.MainExeStatusLabel);
-            this.MainPanel.Controls.Add(this.InstallButton);
+            this.MainPanel.Controls.Add(this.MainInstallButton);
             this.MainPanel.Controls.Add(this.MainStep1Label);
             this.MainPanel.Location = new System.Drawing.Point(1, 130);
             this.MainPanel.Margin = new System.Windows.Forms.Padding(1, 1, 1, 0);
@@ -193,21 +193,21 @@
             this.MainExeStatusLabel.TabIndex = 3;
             this.MainExeStatusLabel.Text = "Status:";
             // 
-            // InstallButton
+            // MainInstallButton
             // 
-            this.InstallButton.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
-            this.InstallButton.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(127)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
-            this.InstallButton.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(45)))));
-            this.InstallButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.InstallButton.Font = new System.Drawing.Font("Selawik Semilight", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.InstallButton.ForeColor = System.Drawing.Color.White;
-            this.InstallButton.Location = new System.Drawing.Point(32, 427);
-            this.InstallButton.Name = "InstallButton";
-            this.InstallButton.Size = new System.Drawing.Size(249, 31);
-            this.InstallButton.TabIndex = 3;
-            this.InstallButton.Text = "Step 3: Install";
-            this.InstallButton.UseVisualStyleBackColor = false;
-            this.InstallButton.Click += new System.EventHandler(this.InstallButton_Click);
+            this.MainInstallButton.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.MainInstallButton.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(127)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
+            this.MainInstallButton.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(45)))));
+            this.MainInstallButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.MainInstallButton.Font = new System.Drawing.Font("Selawik Semilight", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.MainInstallButton.ForeColor = System.Drawing.Color.White;
+            this.MainInstallButton.Location = new System.Drawing.Point(32, 427);
+            this.MainInstallButton.Name = "MainInstallButton";
+            this.MainInstallButton.Size = new System.Drawing.Size(249, 31);
+            this.MainInstallButton.TabIndex = 3;
+            this.MainInstallButton.Text = "Step 3: Install";
+            this.MainInstallButton.UseVisualStyleBackColor = false;
+            this.MainInstallButton.Click += new System.EventHandler(this.InstallButton_Click);
             // 
             // MainStep1Label
             // 
@@ -280,7 +280,7 @@
         private CustomPanel MainPanel;
         private CustomPictureBox HeaderPicture;
         private CustomLabel MainStep1Label;
-        private System.Windows.Forms.Button InstallButton;
+        private System.Windows.Forms.Button MainInstallButton;
         private CustomLabel MainExeStatusLabel;
         private System.Windows.Forms.Button MainBrowseButton;
         private CustomPanel ProgressPanel;
