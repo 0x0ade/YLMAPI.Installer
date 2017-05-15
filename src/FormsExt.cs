@@ -10,7 +10,7 @@ using System.Threading;
 using System.Windows.Forms;
 
 namespace MonoMod.Installer {
-    public static class CustomRenderExt {
+    public static class FormsExt {
 
         public static Bitmap Scaled(this Image img, float scale) {
             return new Bitmap(img, (int) (img.Width * scale), (int) (img.Height * scale));
@@ -50,6 +50,15 @@ namespace MonoMod.Installer {
                 );
             }
 
+        }
+
+        public static Color Lerp(this Color a, Color b, float t) {
+            return Color.FromArgb(
+                (int) (a.A + (b.A - a.A) * t),
+                (int) (a.R + (b.R - a.R) * t),
+                (int) (a.G + (b.G - a.G) * t),
+                (int) (a.B + (b.B - a.B) * t)
+            );
         }
 
         public static Control GetDeepChildAtPoint(this Control c, Point p) {

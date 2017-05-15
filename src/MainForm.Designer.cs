@@ -39,6 +39,8 @@
             this.MainInstallButton = new System.Windows.Forms.Button();
             this.MainStep1Label = new MonoMod.Installer.CustomLabel();
             this.HeaderPanel = new MonoMod.Installer.CustomPanel();
+            this.MinimizeButton = new System.Windows.Forms.Button();
+            this.CloseButton = new System.Windows.Forms.Button();
             this.HeaderPicture = new MonoMod.Installer.CustomPictureBox();
             this.ProgressPanel.SuspendLayout();
             this.MainPanel.SuspendLayout();
@@ -90,7 +92,7 @@
             // 
             // panel1
             // 
-            this.panel1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(45)))));
+            this.panel1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(37)))), ((int)(((byte)(37)))), ((int)(((byte)(37)))));
             this.panel1.Controls.Add(this.MainVersionList);
             this.panel1.Location = new System.Drawing.Point(32, 114);
             this.panel1.Margin = new System.Windows.Forms.Padding(1, 4, 1, 0);
@@ -101,7 +103,7 @@
             // 
             // MainVersionList
             // 
-            this.MainVersionList.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(45)))));
+            this.MainVersionList.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(37)))), ((int)(((byte)(37)))), ((int)(((byte)(37)))));
             this.MainVersionList.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.MainVersionList.Dock = System.Windows.Forms.DockStyle.Fill;
             this.MainVersionList.ForeColor = System.Drawing.Color.White;
@@ -126,7 +128,7 @@
             // 
             // MainPathPanel
             // 
-            this.MainPathPanel.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(45)))));
+            this.MainPathPanel.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(37)))), ((int)(((byte)(37)))), ((int)(((byte)(37)))));
             this.MainPathPanel.Controls.Add(this.MainPathBox);
             this.MainPathPanel.Location = new System.Drawing.Point(32, 29);
             this.MainPathPanel.Margin = new System.Windows.Forms.Padding(1, 4, 1, 0);
@@ -137,7 +139,7 @@
             // 
             // MainPathBox
             // 
-            this.MainPathBox.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(45)))));
+            this.MainPathBox.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(37)))), ((int)(((byte)(37)))), ((int)(((byte)(37)))));
             this.MainPathBox.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.MainPathBox.Dock = System.Windows.Forms.DockStyle.Fill;
             this.MainPathBox.Font = new System.Drawing.Font("Selawik Semilight", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -152,7 +154,7 @@
             // 
             this.MainUninstallButton.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
             this.MainUninstallButton.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(127)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
-            this.MainUninstallButton.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(45)))));
+            this.MainUninstallButton.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(127)))), ((int)(((byte)(58)))), ((int)(((byte)(58)))), ((int)(((byte)(58)))));
             this.MainUninstallButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.MainUninstallButton.Font = new System.Drawing.Font("Selawik Semilight", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.MainUninstallButton.ForeColor = System.Drawing.Color.White;
@@ -168,7 +170,7 @@
             // 
             this.MainBrowseButton.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
             this.MainBrowseButton.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(127)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
-            this.MainBrowseButton.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(45)))));
+            this.MainBrowseButton.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(127)))), ((int)(((byte)(58)))), ((int)(((byte)(58)))), ((int)(((byte)(58)))));
             this.MainBrowseButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.MainBrowseButton.Font = new System.Drawing.Font("Selawik Semilight", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.MainBrowseButton.ForeColor = System.Drawing.Color.White;
@@ -197,7 +199,7 @@
             // 
             this.MainInstallButton.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
             this.MainInstallButton.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(127)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
-            this.MainInstallButton.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(45)))));
+            this.MainInstallButton.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(127)))), ((int)(((byte)(58)))), ((int)(((byte)(58)))), ((int)(((byte)(58)))));
             this.MainInstallButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.MainInstallButton.Font = new System.Drawing.Font("Selawik Semilight", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.MainInstallButton.ForeColor = System.Drawing.Color.White;
@@ -225,12 +227,40 @@
             // HeaderPanel
             // 
             this.HeaderPanel.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.HeaderPanel.Controls.Add(this.MinimizeButton);
+            this.HeaderPanel.Controls.Add(this.CloseButton);
             this.HeaderPanel.Controls.Add(this.HeaderPicture);
             this.HeaderPanel.Location = new System.Drawing.Point(1, 1);
             this.HeaderPanel.Margin = new System.Windows.Forms.Padding(1, 1, 1, 0);
             this.HeaderPanel.Name = "HeaderPanel";
             this.HeaderPanel.Size = new System.Drawing.Size(458, 128);
             this.HeaderPanel.TabIndex = 0;
+            // 
+            // MinimizeButton
+            // 
+            this.MinimizeButton.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.MinimizeButton.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(127)))), ((int)(((byte)(58)))), ((int)(((byte)(58)))), ((int)(((byte)(58)))));
+            this.MinimizeButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.MinimizeButton.Image = global::MonoMod.Installer.Properties.Resources.minimize;
+            this.MinimizeButton.Location = new System.Drawing.Point(397, 8);
+            this.MinimizeButton.Margin = new System.Windows.Forms.Padding(1, 8, 0, 0);
+            this.MinimizeButton.Name = "MinimizeButton";
+            this.MinimizeButton.Size = new System.Drawing.Size(26, 26);
+            this.MinimizeButton.TabIndex = 2;
+            this.MinimizeButton.UseVisualStyleBackColor = true;
+            // 
+            // CloseButton
+            // 
+            this.CloseButton.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.CloseButton.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(127)))), ((int)(((byte)(58)))), ((int)(((byte)(58)))), ((int)(((byte)(58)))));
+            this.CloseButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.CloseButton.Image = global::MonoMod.Installer.Properties.Resources.close;
+            this.CloseButton.Location = new System.Drawing.Point(424, 8);
+            this.CloseButton.Margin = new System.Windows.Forms.Padding(1, 8, 8, 0);
+            this.CloseButton.Name = "CloseButton";
+            this.CloseButton.Size = new System.Drawing.Size(26, 26);
+            this.CloseButton.TabIndex = 1;
+            this.CloseButton.UseVisualStyleBackColor = true;
             // 
             // HeaderPicture
             // 
@@ -291,6 +321,8 @@
         private System.Windows.Forms.ListBox MainVersionList;
         private CustomLabel MainVersionLabel;
         private System.Windows.Forms.Panel panel1;
+        private System.Windows.Forms.Button CloseButton;
+        private System.Windows.Forms.Button MinimizeButton;
     }
 }
 

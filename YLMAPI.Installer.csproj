@@ -62,7 +62,7 @@
     <Reference Include="System.Windows.Forms" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="src\CustomRenderExt.cs" />
+    <Compile Include="src\FormsExt.cs" />
     <Compile Include="src\AnimationManager.cs" />
     <Compile Include="src\CustomControls\CustomLabel.cs">
       <SubType>Component</SubType>
@@ -249,6 +249,8 @@
     <None Include="Content\background_2.png" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Content\minimize.png" />
+    <None Include="Content\close.png" />
     <Content Include="icon.ico" />
   </ItemGroup>
   <ItemGroup>

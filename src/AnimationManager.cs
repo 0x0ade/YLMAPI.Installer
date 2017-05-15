@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Drawing;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
@@ -112,6 +113,41 @@ namespace MonoMod.Installer {
             }, run: run);
         }
 
+        public static void PrepareAnimations(this Button b, Color cBorderFocused) {
+            if (b == null)
+                return;
+
+            Animation fadeCurrent = null;
+
+            Action<Color, Color> fade = (cBorderTo, cBackTo) => {
+                if (fadeCurrent != null)
+                    fadeCurrent.Status = Animation.EStatus.Finished;
+                Color cBorderFrom = b.FlatAppearance.BorderColor;
+                Color cBackFrom = b.BackColor;
+                fadeCurrent = b.Animate((a, t) => {
+                    b.SuspendLayout();
+
+                    b.FlatAppearance.BorderColor = cBorderFrom.Lerp(cBorderTo, t);
+                    b.BackColor = b.FlatAppearance.MouseOverBackColor = cBackFrom.Lerp(cBackTo, t);
+
+                    b.ResumeLayout(false);
+                    b.PerformLayout();
+                }, dur: 0.15f, smooth: false);
+            };
+
+            Color cBorderNeutral = b.FlatAppearance.BorderColor;
+            Color cBackNeutral = b.BackColor;
+            Color cBackHovered = b.FlatAppearance.MouseOverBackColor;
+
+            b.FlatAppearance.MouseOverBackColor = b.BackColor;
+
+            b.MouseEnter += (s, e) => fade(cBorderFocused, cBackHovered);
+            b.GotFocus += (s, e) => fade(cBorderFocused, cBackHovered);
+            b.MouseLeave += (s, e) => {
+                if (!b.Focused) fade(cBorderNeutral, cBackNeutral);
+            };
+            b.LostFocus += (s, e) => fade(cBorderNeutral, cBackNeutral);
+        }
 
         private static Thread _Thread;
         private static void _StartThread() {

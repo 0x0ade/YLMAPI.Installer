@@ -28,6 +28,8 @@ namespace MonoMod.Installer {
 
         public readonly static Random RNG = new Random();
 
+        public readonly static Color ColorBorderFocused = Color.FromArgb(255, 21, 116, 180);
+
         public readonly GameModInfo Info;
 
         public bool DrawFPS = true;
@@ -92,7 +94,10 @@ namespace MonoMod.Installer {
                     _Fonts.AddMemoryFont(new IntPtr(dataptr), data.Length);
             }
             _Font = new Font(_Fonts.Families[0], 12f);
-            Controls.ForEachDeep(c => c.Font = _Font);
+            Controls.ForEachDeep(c => {
+                c.Font = _Font;
+                (c as Button)?.PrepareAnimations(ColorBorderFocused);
+            });
 
             if (Environment.OSVersion.Platform == PlatformID.Win32NT &&
                 AnimationManager.IsMono) {
