@@ -439,17 +439,17 @@ namespace MonoMod.Installer {
         }
 
         private int _PreviousModVersionIndex;
-        private bool _SelectingCustomModVersion;
         private void MainVersionList_SelectedIndexChanged(object sender, EventArgs e) {
+            if (_PreviousModVersionIndex == MainVersionList.SelectedIndex)
+                return;
+
             GameModInfo.ModVersion version = MainVersionList.SelectedItem as GameModInfo.ModVersion;
             if (version == null)
                 return;
 
             if (version.URL == "|custom|") {
-                _SelectingCustomModVersion = true;
                 if (_ModBrowseDialog.ShowDialog(this) != DialogResult.OK)
                     MainVersionList.SelectedIndex = _PreviousModVersionIndex;
-                _SelectingCustomModVersion = false;
                 return;
             }
 
