@@ -16,9 +16,11 @@ namespace MonoMod.Installer {
 
         private static Stopwatch _Stopwatch;
         public static float Time { get; private set; }
-        public static float FrameTimeThrottled = 1f / 30f;
-        public static float FrameTime = 1f / 60f;
-        public static float FrameTimeSmooth = 1f / 60f;
+        public static float FrameTimeThrottled = 1f / 15f;
+        // Blame Vicyorus#5202 on Discord when CPUs start melting.
+        public static float FrameTime = 0f; // 1f / 60f;
+        public static float FrameTimeSmooth = 0f; // 1f / 60f;
+        public static float FrameTimeBattery = 1f / 30f;
 
         public static float CurrentFrameTime { get; private set; }
 
@@ -141,18 +143,37 @@ namespace MonoMod.Installer {
 
             b.FlatAppearance.MouseOverBackColor = b.BackColor;
 
-            b.MouseEnter += (s, e) => fade(cBorderFocused, cBackHovered);
-            b.GotFocus += (s, e) => fade(cBorderFocused, cBackHovered);
-            b.MouseLeave += (s, e) => {
-                if (!b.Focused) fade(cBorderNeutral, cBackNeutral);
+            bool mouseInside = false;
+
+            b.MouseEnter += (s, e) => {
+                fade(cBorderFocused, cBackHovered);
+                mouseInside = true;
             };
-            b.LostFocus += (s, e) => fade(cBorderNeutral, cBackNeutral);
+            b.GotFocus += (s, e) => {
+                fade(cBorderFocused, cBackHovered);
+            };
+            b.MouseLeave += (s, e) => {
+                if (!b.Focused)
+                    fade(cBorderNeutral, cBackNeutral);
+                mouseInside = false;
+            };
+            b.LostFocus += (s, e) => {
+                if (!mouseInside)
+                    fade(cBorderNeutral, cBackNeutral);
+            };
         }
 
         private static Thread _Thread;
         private static void _StartThread() {
             if (_Thread != null)
                 return;
+
+            if (FrameTimeSmooth <= 0f) {
+                int rate = DisplayRefreshRate;
+                FrameTimeSmooth = rate > 0 ? 1f / rate : 0f;
+            }
+            if (FrameTime <= 0f)
+                FrameTime = FrameTimeSmooth;
 
             _Thread = new Thread(_ThreadLoop);
             _Thread.Name = "AnimationManager Thread";
@@ -174,6 +195,9 @@ namespace MonoMod.Installer {
             long frameLeft;
 
             while (_Thread != null) {
+                if (SystemInformation.PowerStatus.PowerLineStatus == PowerLineStatus.Offline)
+                    frameTimeF = FrameTimeBattery;
+
                 if (IsThrottled)
                     frameTimeF = FrameTimeThrottled;
 
@@ -191,6 +215,8 @@ namespace MonoMod.Installer {
 
                 for (int i = Animations.Count - 1; i > -1; --i) {
                     Animation anim = Animations[i];
+                    if (anim == null)
+                        continue;
                     if (anim.Control == null || anim.Control.IsDisposed)
                         continue;
                     if (anim.Control != AnimationRoot && !controls.Contains(anim.Control)) {
@@ -310,6 +336,26 @@ namespace MonoMod.Installer {
 
             target.ResumeLayout(true);
             // target.Invalidate();
+        }
+
+        private const int VREFRESH = 116;
+        [DllImport("gdi32.dll")]
+        private static extern int GetDeviceCaps(IntPtr hdc, int nIndex);
+
+        public static int DisplayRefreshRate {
+            get {
+                if (Environment.OSVersion.Platform == PlatformID.Win32NT) {
+                    using (Graphics g = Graphics.FromHwnd(IntPtr.Zero)) {
+                        IntPtr desktop = g.GetHdc();
+                        int rate = GetDeviceCaps(desktop, VREFRESH);
+                        if (rate <= 1)
+                            return 0;
+                        return rate;
+                    }
+                }
+
+                return 0;
+            }
         }
 
     }

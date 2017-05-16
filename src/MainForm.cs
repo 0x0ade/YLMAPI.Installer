@@ -270,6 +270,10 @@ namespace MonoMod.Installer {
                 g.DrawString((1f / AnimationManager.CurrentFrameTime).ToString("F3", System.Globalization.CultureInfo.InvariantCulture), _Font, _FPSBrush, 0, 0);
                 g.DrawString((1f / _CurrentFrameTime).ToString("F3", System.Globalization.CultureInfo.InvariantCulture), _Font, _FPSBrush, 0, 14 * (AutoScaleFactor.Height));
             }
+
+            this.SetProgressState(TaskbarExt.TBPF.TBPF_NORMAL);
+            this.SetProgressValue(5, 10);
+            // this.SetOverlayIcon(Icon); // This causes lag.
         }
 
         protected virtual void OnDispose(bool disposing) {
@@ -319,6 +323,14 @@ namespace MonoMod.Installer {
 
         private void MainUninstallButton_Click(object sender, EventArgs e) {
 
+        }
+
+        private void MinimizeButton_Click(object sender, EventArgs e) {
+            WindowState = FormWindowState.Minimized;
+        }
+
+        private void CloseButton_Click(object sender, EventArgs e) {
+            Close();
         }
     }
 }
