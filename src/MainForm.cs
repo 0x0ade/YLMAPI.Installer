@@ -76,15 +76,10 @@ namespace MonoMod.Installer {
             SetStyle(ControlStyles.AllPaintingInWmPaint, true);
             DoubleBuffered = true;
 
-            ResizeRedraw = true;
+            ResizeRedraw = !AnimationManager.IsMono;
 
             ResizeBegin += (s, e) => AnimationManager.IsThrottled = true;
             ResizeEnd += (s, e) => AnimationManager.IsThrottled = false;
-
-            SizeChanged += (s, e) => {
-                foreach (Panel panel in Controls)
-                    panel.Width = Width;
-            };
 
             _Fonts = new PrivateFontCollection();
             unsafe
@@ -126,6 +121,12 @@ namespace MonoMod.Installer {
 
             AnimationManager.AnimationRoot = this;
             Invalidated += (s, e) => AnimationManager.InvalidatedRoot++;
+
+            if (AnimationManager.IsMono) {
+                MouseDown += _DragStart;
+                MouseMove += _DragMove;
+                MouseUp += _DragEnd;
+            }
 
             this.Animate((a, t) => Opacity = t, dur: 0.4f, smooth: true);
             this.Animate((a, t) => BackgroundSizeFactor = 1f + 8f * (1f - t), dur: 2f, easing: Easings.QuinticEaseOut, smooth: true);
@@ -294,7 +295,8 @@ namespace MonoMod.Installer {
         private readonly static IntPtr TRUE = new IntPtr(1);
 
         protected override void WndProc(ref Message m) {
-            if (m.Msg == WM_NCHITTEST) {
+            if (m.Msg == WM_NCHITTEST && !AnimationManager.IsMono) {
+                // This likes to kill the animation manager in Mono and sometimes fails on Linux.
                 Point cursor = new Point(m.LParam.ToInt32() & 0xFFFF, m.LParam.ToInt32() >> 16);
                 cursor = PointToClient(cursor);
                 if (cursor.Y < 130) {
@@ -311,6 +313,34 @@ namespace MonoMod.Installer {
 
             base.WndProc(ref m);
         }
+
+        private bool _Dragging = false;
+        private Point _DraggingStartPoint;
+
+        private void _DragStart(object sender, MouseEventArgs e) {
+            _Dragging = true;
+            _DraggingStartPoint = e.Location;
+            AnimationManager.IsThrottled = true;
+        }
+
+        private void _DragMove(object sender, MouseEventArgs e) {
+            if (!_Dragging)
+                return;
+
+            Location = new Point(
+                (Location.X - _DraggingStartPoint.X) + e.X,
+                (Location.Y - _DraggingStartPoint.Y) + e.Y
+            );
+
+            // Refresh handled by AnimationManager
+            // Refresh();
+        }
+
+        private void _DragEnd(object sender, MouseEventArgs e) {
+            _Dragging = false;
+            AnimationManager.IsThrottled = false;
+        }
+
 
         private void MainBrowseButton_Click(object sender, EventArgs e) {
             _BrowseDialog.ShowDialog(this);

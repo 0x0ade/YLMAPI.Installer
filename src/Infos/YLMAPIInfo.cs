@@ -46,7 +46,7 @@ namespace MonoMod.Installer.YLMAPI {
                 if ((PlatformHelper.Current & Platform.MacOS) == Platform.MacOS)
                     // From ETG:
                     // /Users/$USER/Library/Application Support/Steam/SteamApps/common/Enter the Gungeon/EtG_OSX.app/Contents/MacOS/EtG_OSX
-                    return "YookaLaylee_OSX.app/Contents/MacOS";
+                    return "YookaLaylee_OSX.app/Contents/MacOS".NormalizeFilepath();
 
                 return null;
             }
@@ -79,17 +79,17 @@ namespace MonoMod.Installer.YLMAPI {
             get {
                 if ((PlatformHelper.Current & Platform.Windows) == Platform.Windows)
                     return new string[] {
-                        "YookaLaylee64_Data/Managed/Assembly-CSharp.dll"
+                        "YookaLaylee64_Data/Managed/Assembly-CSharp.dll".NormalizeFilepath()
                     };
 
                 if ((PlatformHelper.Current & Platform.MacOS) == Platform.MacOS)
                     return new string[] {
-                        "YookaLaylee_OSX.app/Contents/Resources/Data/Managed/Assembly-CSharp.dll"
+                        "YookaLaylee_OSX.app/Contents/Resources/Data/Managed/Assembly-CSharp.dll".NormalizeFilepath()
                     };
 
                 if ((PlatformHelper.Current & Platform.Linux) == Platform.Linux)
                     return new string[] {
-                        "YookaLaylee_Data/Managed/Assembly-CSharp.dll"
+                        "YookaLaylee_Data/Managed/Assembly-CSharp.dll".NormalizeFilepath()
                     };
 
                 return null;

@@ -36,6 +36,12 @@ namespace MonoMod.Installer {
         internal Dictionary<string, string> _GameIDs;
         public override Dictionary<string, string> GameIDs => _GameIDs;
 
+        internal string _CacheDir;
+        public override string CacheDir => _CacheDir;
+
+        internal ModBackup[] _AdditionalBackups;
+        public override ModBackup[] AdditionalBackups => _AdditionalBackups;
+
         internal ModVersion[] _ModVersions;
         public override ModVersion[] ModVersions {
             get {
@@ -56,6 +62,8 @@ namespace MonoMod.Installer {
             _ExecutableName = from.ExecutableName;
             _Assemblies = from.Assemblies;
             _GameIDs = from.GameIDs;
+            _CacheDir = from.CacheDir;
+            _AdditionalBackups = from.AdditionalBackups;
         }
 
     }

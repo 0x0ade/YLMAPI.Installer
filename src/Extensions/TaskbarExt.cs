@@ -103,7 +103,7 @@ namespace MonoMod.Installer {
         }
 
         private readonly static ITaskbarList3 _Instance = (ITaskbarList3) new TaskbarInstance();
-        private readonly static bool _Supported = Environment.OSVersion.Platform == PlatformID.Win32NT && Environment.OSVersion.Version >= new Version(6, 1);
+        private readonly static bool _Supported = Type.GetType("Mono.Runtime") == null && Environment.OSVersion.Platform == PlatformID.Win32NT && Environment.OSVersion.Version >= new Version(6, 1);
 
         public static void SetProgressState(this Form form, TBPF state) {
             if (_Supported)

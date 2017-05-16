@@ -195,7 +195,7 @@ namespace MonoMod.Installer {
             long frameLeft;
 
             while (_Thread != null) {
-                if (SystemInformation.PowerStatus.PowerLineStatus == PowerLineStatus.Offline)
+                if (!IsMono && SystemInformation.PowerStatus.PowerLineStatus == PowerLineStatus.Offline)
                     frameTimeF = FrameTimeBattery;
 
                 if (IsThrottled)
@@ -267,6 +267,7 @@ namespace MonoMod.Installer {
                 _CurrentRootInvalidate = InvokeInvalidate(AnimationRoot, true);
 
             }
+
         }
 
         public static IAsyncResult InvokeInvalidate(Control c, bool invalidateChildren) {
@@ -344,7 +345,7 @@ namespace MonoMod.Installer {
 
         public static int DisplayRefreshRate {
             get {
-                if (Environment.OSVersion.Platform == PlatformID.Win32NT) {
+                if (!IsMono && Environment.OSVersion.Platform == PlatformID.Win32NT) {
                     using (Graphics g = Graphics.FromHwnd(IntPtr.Zero)) {
                         IntPtr desktop = g.GetHdc();
                         int rate = GetDeviceCaps(desktop, VREFRESH);

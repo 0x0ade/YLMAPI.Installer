@@ -21,6 +21,17 @@ namespace MonoMod.Installer {
         public abstract string[] Assemblies { get; }
         public abstract Dictionary<string, string> GameIDs { get; }
 
+        public virtual string CacheDir {
+            get {
+                return "ModInstallerCache";
+            }
+        }
+        public virtual ModBackup[] AdditionalBackups {
+            get {
+                return new ModBackup[0];
+            }
+        }
+
         public abstract ModVersion[] ModVersions { get; }
 
         private string _CurrentExecutablePath;
@@ -66,6 +77,11 @@ namespace MonoMod.Installer {
         public class ModVersion {
             public string Name;
             public string URL;
+        }
+
+        public class ModBackup {
+            public string From;
+            public string To;
         }
 
     }
