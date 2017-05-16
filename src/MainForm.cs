@@ -7,6 +7,7 @@ using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
 using System.Drawing.Text;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Windows.Forms;
 
@@ -32,7 +33,12 @@ namespace MonoMod.Installer {
 
         public readonly GameModInfo Info;
 
-        public bool DrawFPS = true;
+        public bool ShowFPS =
+#if DEBUG
+            true;
+#else
+            false;
+#endif
 
         public Size BackgroundSize;
         public float BackgroundSizeFactor;
@@ -45,6 +51,8 @@ namespace MonoMod.Installer {
         private Animation _IntroSlideAnimation;
 
         private OpenFileDialog _BrowseDialog;
+
+        public readonly string VersionString;
 
         public MainForm(GameModInfo info) {
             Info = new CachedInfo(info);
@@ -59,6 +67,13 @@ namespace MonoMod.Installer {
             MainStep1Label.Text = string.Format(MainStep1Label.Text, Info.ExecutableName);
             BackgroundImage = Info.BackgroundImage;
             HeaderPicture.Image = Info.HeaderImage;
+
+            Version v = Assembly.GetEntryAssembly().GetName().Version;
+#if !DEBUG
+            VersionString = $"v{v.Major}.{v.Minor}.{v.Build}";
+#else
+            VersionString = $"DEBUG #{v.Revision}";
+#endif
 
             ResumeLayout(false);
         }
@@ -165,6 +180,7 @@ namespace MonoMod.Installer {
         private PointF _BackgroundOffs;
         private SolidBrush _BackgroundBrush = new SolidBrush(Color.FromArgb(127, 45, 45, 45));
         private SolidBrush _FPSBrush = new SolidBrush(Color.FromArgb(127, 255, 255, 255));
+        private SolidBrush _VersionBrush = new SolidBrush(Color.FromArgb(127, 255, 255, 255));
         private SolidBrush _ProgressShapeBrush = new SolidBrush(Color.FromArgb(127, 255, 255, 255));
         private long _FrameStart;
         private long _FrameStartPrev;
@@ -253,6 +269,13 @@ namespace MonoMod.Installer {
                 if (panel.Visible)
                     g.FillRectangle(_BackgroundBrush, panel.Left, panel.Top, panel.Width, panel.Height);
 
+            SizeF versionSize = g.MeasureString(VersionString, _Font);
+            g.DrawString(VersionString, _Font, _VersionBrush,
+                HeaderPanel.Left + HeaderPanel.Width - versionSize.Width,
+                HeaderPanel.Top + HeaderPanel.Height - versionSize.Height
+            );
+
+
             if (_ProgressShapesInit && ProgressPanel.Visible) {
                 g.SmoothingMode = SmoothingMode.AntiAlias;
                 Matrix transformPrev = g.Transform;
@@ -267,7 +290,7 @@ namespace MonoMod.Installer {
                 g.SmoothingMode = SmoothingMode.HighSpeed;
             }
 
-            if (DrawFPS) {
+            if (ShowFPS) {
                 g.DrawString((1f / AnimationManager.CurrentFrameTime).ToString("F3", System.Globalization.CultureInfo.InvariantCulture), _Font, _FPSBrush, 0, 0);
                 g.DrawString((1f / _CurrentFrameTime).ToString("F3", System.Globalization.CultureInfo.InvariantCulture), _Font, _FPSBrush, 0, 14 * (AutoScaleFactor.Height));
             }
