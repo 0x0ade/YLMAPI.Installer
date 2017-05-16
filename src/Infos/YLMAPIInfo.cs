@@ -107,7 +107,7 @@ namespace MonoMod.Installer.YLMAPI {
 
         public override ModVersion[] ModVersions {
             get {
-                return new ModVersion[0];
+                return GetAndParseVersions("http://ylmapi.github.io/versions.txt");
             }
         }
 

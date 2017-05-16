@@ -13,7 +13,6 @@
             if (disposing && (components != null)) {
                 components.Dispose();
             }
-            OnDispose(disposing);
             base.Dispose(disposing);
         }
 

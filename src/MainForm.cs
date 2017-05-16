@@ -9,6 +9,7 @@ using System.Drawing.Text;
 using System.Linq;
 using System.Reflection;
 using System.Text;
+using System.Threading;
 using System.Windows.Forms;
 
 namespace MonoMod.Installer {
@@ -53,6 +54,8 @@ namespace MonoMod.Installer {
         private OpenFileDialog _BrowseDialog;
 
         public readonly string VersionString;
+
+        private Thread _ModVersionsThread;
 
         public MainForm(GameModInfo info) {
             Info = new CachedInfo(info);
@@ -174,6 +177,10 @@ namespace MonoMod.Installer {
             _BrowseDialog.FileOk += (object s, CancelEventArgs e) => {
                 Info.CurrentExecutablePath = _BrowseDialog.FileNames[0];
             };
+
+            _ModVersionsThread = new Thread(_DownloadModVersions);
+            _ModVersionsThread.IsBackground = true;
+            _ModVersionsThread.Start();
         }
 
 
@@ -214,27 +221,31 @@ namespace MonoMod.Installer {
                 _ProgressShapesInit = true;
 
             } else {
-                float pulse = Easings.CubicEaseIn(Math.Max(0f, 1f - (AnimationManager.Time % 3f) / 3f));
-                int currentIndex = (int) (pulse * _ProgressShapes.Length);
-                PointF[] current = _ProgressShapes[currentIndex];
-                for (int i = current.Length - 1; i > -1; --i) {
-                    float f = (i / (float) current.Length) * (float) Math.PI * 2f;
-                    f += AnimationManager.Time * 0.1f;
-                    PointF from = current[i];
-                    PointF to = new PointF(
-                        (float) (128f * Math.Cos(f)),
-                        (float) (128f * Math.Sin(f))
-                    );
-                    PointF offs = new PointF(
-                        32f * (float) (RNG.NextDouble() - 0.5f),
-                        32f * (float) (RNG.NextDouble() - 0.5f)
-                    );
-                    current[i] = new PointF(
-                        from.X + (to.X - from.X) * 0.1f + pulse * offs.X,
-                        from.Y + (to.Y - from.Y) * 0.1f + pulse * offs.Y
-                    );
+                try {
+                    float pulse = Easings.CubicEaseIn(Math.Max(0f, 1f - (AnimationManager.Time % 3f) / 3f));
+                    int currentIndex = (int) (pulse * _ProgressShapes.Length);
+                    PointF[] current = _ProgressShapes[currentIndex];
+                    for (int i = current.Length - 1; i > -1; --i) {
+                        float f = (i / (float) current.Length) * (float) Math.PI * 2f;
+                        f += AnimationManager.Time * 0.1f;
+                        PointF from = current[i];
+                        PointF to = new PointF(
+                            (float) (128f * Math.Cos(f)),
+                            (float) (128f * Math.Sin(f))
+                        );
+                        PointF offs = new PointF(
+                            32f * (float) (RNG.NextDouble() - 0.5f),
+                            32f * (float) (RNG.NextDouble() - 0.5f)
+                        );
+                        current[i] = new PointF(
+                            from.X + (to.X - from.X) * 0.1f + pulse * offs.X,
+                            from.Y + (to.Y - from.Y) * 0.1f + pulse * offs.Y
+                        );
+                    }
+                    _ProgressShapeCurrent = current;
+                } catch {
+                    // Likes to fail without explanation sometimes.
                 }
-                _ProgressShapeCurrent = current;
             }
         }
 
@@ -300,12 +311,34 @@ namespace MonoMod.Installer {
             // this.SetOverlayIcon(Icon); // This causes lag.
         }
 
-        protected virtual void OnDispose(bool disposing) {
-            if (disposing) {
-                _Font?.Dispose();
-                _Font = null;
-                _Fonts?.Dispose();
-                _Fonts = null;
+        private void _DownloadModVersions() {
+            MainVersionList.Invoke((Action) (() => {
+                MainVersionList.Enabled = false;
+                MainVersionList.BeginUpdate();
+                MainVersionList.Items.Clear();
+                MainVersionList.Items.Add("Downloading version list, please wait.");
+                MainVersionList.EndUpdate();
+            }));
+
+            try {
+                // This also caches the ModVersions in the CachedInfo.
+                GameModInfo.ModVersion[] versions = Info.ModVersions;
+                MainVersionList.Invoke((Action) (() => {
+                    MainVersionList.Enabled = true;
+                    MainVersionList.BeginUpdate();
+                    MainVersionList.Items.Clear();
+                    for (int i = 0; i < versions.Length; i++)
+                        MainVersionList.Items.Add(versions[0].Name);
+                    MainVersionList.Items.Add("Custom .zip");
+                    MainVersionList.EndUpdate();
+                }));
+            } catch {
+                MainVersionList.Invoke((Action) (() => {
+                    MainVersionList.Enabled = true;
+                    MainVersionList.BeginUpdate();
+                    MainVersionList.Items.Add("Custom .zip");
+                    MainVersionList.EndUpdate();
+                }));
             }
         }
 

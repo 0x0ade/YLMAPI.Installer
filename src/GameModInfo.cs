@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
 using System.Linq;
+using System.Net;
 using System.Text;
 
 namespace MonoMod.Installer {
@@ -82,6 +83,25 @@ namespace MonoMod.Installer {
         public class ModBackup {
             public string From;
             public string To;
+        }
+
+        public ModVersion[] GetAndParseVersions(string url) {
+            string data = null;
+            using (WebClient wc = new WebClient())
+                data = wc.DownloadString(url);
+
+            string[] lines = data.Split('\n');
+
+            List<ModVersion> versions = new List<ModVersion>();
+            for (int i = 0; i < lines.Length; i++) {
+                string line = lines[i].Trim();
+                if (string.IsNullOrEmpty(line))
+                    continue;
+                string[] split = line.Split('|');
+                versions.Add(new ModVersion { Name = split[0], URL = split[1] });
+            }
+
+            return versions.ToArray();
         }
 
     }
