@@ -73,11 +73,16 @@ namespace MonoMod.Installer {
             }
         }
 
+        public virtual ModVersion CurrentModVersion { get; set; }
+
         public event Action<GameModInfo, string> OnChangeCurrentExecutablePath;
 
         public class ModVersion {
             public string Name;
             public string URL;
+            public override string ToString() {
+                return Name;
+            }
         }
 
         public class ModBackup {

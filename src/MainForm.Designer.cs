@@ -111,6 +111,7 @@
             this.MainVersionList.Name = "MainVersionList";
             this.MainVersionList.Size = new System.Drawing.Size(366, 295);
             this.MainVersionList.TabIndex = 6;
+            this.MainVersionList.SelectedIndexChanged += new System.EventHandler(this.MainVersionList_SelectedIndexChanged);
             // 
             // MainVersionLabel
             // 

@@ -51,7 +51,8 @@ namespace MonoMod.Installer {
 
         private Animation _IntroSlideAnimation;
 
-        private OpenFileDialog _BrowseDialog;
+        private OpenFileDialog _ExeBrowseDialog;
+        private OpenFileDialog _ModBrowseDialog;
 
         public readonly string VersionString;
 
@@ -163,7 +164,7 @@ namespace MonoMod.Installer {
             };
             Info.CurrentExecutablePath = GameFinderManager.Find(Info);
 
-            _BrowseDialog = new OpenFileDialog() {
+            _ExeBrowseDialog = new OpenFileDialog() {
                 Title = $"Select {Info.ExecutableName}",
                 AutoUpgradeEnabled = true,
                 CheckFileExists = true,
@@ -174,8 +175,24 @@ namespace MonoMod.Installer {
                 Filter = $"{Info.ExecutableName}|{Info.ExecutableName}",
                 FilterIndex = 0
             };
-            _BrowseDialog.FileOk += (object s, CancelEventArgs e) => {
-                Info.CurrentExecutablePath = _BrowseDialog.FileNames[0];
+            _ExeBrowseDialog.FileOk += (object s, CancelEventArgs e) => {
+                Info.CurrentExecutablePath = _ExeBrowseDialog.FileNames[0];
+            };
+
+            _ModBrowseDialog = new OpenFileDialog() {
+                Title = $"Select {Info.ModName}",
+                AutoUpgradeEnabled = true,
+                CheckFileExists = true,
+                CheckPathExists = true,
+                ValidateNames = true,
+                Multiselect = false,
+                ShowReadOnly = false,
+                Filter = $"{Info.ModName} (*.zip)|*.zip",
+                FilterIndex = 0
+            };
+            _ModBrowseDialog.FileOk += (object s, CancelEventArgs e) => {
+                Info.CurrentModVersion = new GameModInfo.ModVersion { Name = "Custom .zip", URL = "|local|" + _ModBrowseDialog.FileNames[0] };
+                _PreviousModVersionIndex = MainVersionList.SelectedIndex;
             };
 
             _ModVersionsThread = new Thread(_DownloadModVersions);
@@ -320,6 +337,8 @@ namespace MonoMod.Installer {
                 MainVersionList.EndUpdate();
             }));
 
+            GameModInfo.ModVersion custom = new GameModInfo.ModVersion { Name = "Custom .zip", URL = "|custom|" };
+
             try {
                 // This also caches the ModVersions in the CachedInfo.
                 GameModInfo.ModVersion[] versions = Info.ModVersions;
@@ -328,15 +347,15 @@ namespace MonoMod.Installer {
                     MainVersionList.BeginUpdate();
                     MainVersionList.Items.Clear();
                     for (int i = 0; i < versions.Length; i++)
-                        MainVersionList.Items.Add(versions[0].Name);
-                    MainVersionList.Items.Add("Custom .zip");
+                        MainVersionList.Items.Add(versions[0]);
+                    MainVersionList.Items.Add(custom);
                     MainVersionList.EndUpdate();
                 }));
             } catch {
                 MainVersionList.Invoke((Action) (() => {
                     MainVersionList.Enabled = true;
                     MainVersionList.BeginUpdate();
-                    MainVersionList.Items.Add("Custom .zip");
+                    MainVersionList.Items.Add(custom);
                     MainVersionList.EndUpdate();
                 }));
             }
@@ -399,7 +418,7 @@ namespace MonoMod.Installer {
 
 
         private void MainBrowseButton_Click(object sender, EventArgs e) {
-            _BrowseDialog.ShowDialog(this);
+            _ExeBrowseDialog.ShowDialog(this);
         }
 
         private void InstallButton_Click(object sender, EventArgs e) {
@@ -418,5 +437,25 @@ namespace MonoMod.Installer {
         private void CloseButton_Click(object sender, EventArgs e) {
             Close();
         }
+
+        private int _PreviousModVersionIndex;
+        private bool _SelectingCustomModVersion;
+        private void MainVersionList_SelectedIndexChanged(object sender, EventArgs e) {
+            GameModInfo.ModVersion version = MainVersionList.SelectedItem as GameModInfo.ModVersion;
+            if (version == null)
+                return;
+
+            if (version.URL == "|custom|") {
+                _SelectingCustomModVersion = true;
+                if (_ModBrowseDialog.ShowDialog(this) != DialogResult.OK)
+                    MainVersionList.SelectedIndex = _PreviousModVersionIndex;
+                _SelectingCustomModVersion = false;
+                return;
+            }
+
+            _PreviousModVersionIndex = MainVersionList.SelectedIndex;
+            Info.CurrentModVersion = version;
+        }
+
     }
 }
